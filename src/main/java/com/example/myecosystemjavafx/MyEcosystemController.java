@@ -52,6 +52,7 @@ public class MyEcosystemController {
         gc = canvas.getGraphicsContext2D();
         gc.setImageSmoothing(true);  //сглаживание
         loadBackgroundImage();
+        ImageLoader.loadObjectsImages();
         loadEmotionImages();
         setupAnimationTimer();
         startAnimation();
@@ -245,22 +246,22 @@ public class MyEcosystemController {
         //System.out.println("Обновление физики");
         for (UIObject object : objectsList) {
             object.checkState();            // проверка показателей голода и энергии
-            searchTargetDanger(object, objectsList, object.getRadiusVision()); // проверка окружения и идентификация целей и опасностей
+            searchTargetDanger(object, objectsList); // проверка окружения и идентификация целей и опасностей
             object.selectObjectMode();      // выбор поведения
             object.giveBuffDebuff();        // баффы дебаффы на скорость
             object.actionObject();        // опредедение направления движения и движение по факту
-            interact(object, objectsList, BASE_SIZE); // взаимодействия (втч убийства)
+            interact(object, objectsList, RADIUS_INTERACTION); // взаимодействия (втч убийства)
             object.getInfo();
         }
         deleteCorpses();                  // удаление мертвых
     }
 
-    public void searchTargetDanger(UIObject thisObject, ArrayList<UIObject> objectsList, double radiusVision) {
+    public void searchTargetDanger(UIObject thisObject, ArrayList<UIObject> objectsList) {
         if (thisObject instanceof APlant || thisObject.getObjectMode() == Dead ) {return;}
         boolean foundDanger = false;
 
         for (UIObject other : objectsList) {
-            if (other != thisObject && other.getObjectMode() != Dead && thisObject.isInRadius(other, radiusVision)) {
+            if (other != thisObject && other.getObjectMode() != Dead && thisObject.isInRadius(other, thisObject.getRadiusSmellHear())) {
                 double distance = Engines.calculateDistance(thisObject.getCenterX(), thisObject.getCenterY(), other.getCenterX(), other.getCenterY());
 
                 if (thisObject.isTarget(other) && (distance <= thisObject.getTargetDistance())) { // идентификация увиденного
@@ -273,8 +274,10 @@ public class MyEcosystemController {
 
                 if (thisObject.isDanger(other)) {
                     thisObject.setDanger(other.getCenterX(), other.getCenterY());
-                    thisObject.setDangerState(Danger);
-                    foundDanger = true;
+                    if (thisObject.isInRadius(other, RADIUS_VISION)) {
+                        thisObject.setDangerState(Danger);
+                        foundDanger = true;
+                    }
                 }
             }
         }
@@ -328,6 +331,10 @@ public class MyEcosystemController {
     @FXML
     private Canvas canvas;
     private GraphicsContext gc;
+
+//    private class ACarnivoraType; ?
+//    private int ACarnivoraQt;
+
 
     @FXML
     private Button PauseButton;
@@ -406,11 +413,6 @@ public class MyEcosystemController {
     }
 
     @FXML
-    void copyCarnivora(ActionEvent event) {
-        reproductionSimulation();
-    }
-
-    @FXML
     void deleteLastObject(ActionEvent event) {
         if (UIObject.getCounterObjects() != 0) {
             objectsList.remove(UIObject.getCounterObjects() - 1);
@@ -432,7 +434,7 @@ public class MyEcosystemController {
 
     void addPlants(int countPlants) {
         for (int i = 0; i < countPlants; i++) {
-            objectsList.add(UIObject.getCounterObjects(), new PlantTriangle());
+            objectsList.add(UIObject.getCounterObjects(), new PlantTree());
         }
     }
 }

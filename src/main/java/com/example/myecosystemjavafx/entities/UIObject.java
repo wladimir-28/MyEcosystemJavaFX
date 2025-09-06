@@ -26,12 +26,12 @@ public class UIObject {
     protected boolean isPregnant = false;
     protected int maxNumberOfChildren = 1;
 
-    protected Image maleObjectImage;
-    protected boolean maleImageLoaded = false;
-    protected Image femaleObjectImage;
-    protected boolean femaleImageLoaded = false;
-    protected Image deadObjectImage;
-    protected boolean deadImageLoaded = false;
+//    protected static  Image maleImage;
+//    protected static boolean maleImageLoaded = false;
+//    protected static Image femaleImage;
+//    protected static boolean femaleImageLoaded = false;
+//    protected static Image deadImage;
+//    protected static boolean deadImageLoaded = false;
 
     protected double centerX;
     protected double centerY;
@@ -47,7 +47,7 @@ public class UIObject {
 
     protected double targetX = 0;
     protected double targetY = 0;
-    protected double targetDistance = 2 * RADIUS_VISION;
+    protected double targetDistance = 2 * RADIUS_SMELL_HEAR;
 
     protected double dangerX = 0;
     protected double dangerY = 0;
@@ -55,7 +55,7 @@ public class UIObject {
 
     protected double partnerX = 0;
     protected double partnerY = 0;
-    protected double partnerDistance = 2 * RADIUS_VISION;
+    protected double partnerDistance = 2 * RADIUS_SMELL_HEAR;
 
     protected final int MAX_SATIETY = 60;
     protected int satiety = 40;// пока что хардкод
@@ -71,8 +71,8 @@ public class UIObject {
     protected double speedModFromState = 1;
     protected double speed;
 
-    protected double visionModBase;
-    protected double vision = RADIUS_VISION * visionModBase;
+    protected double smellHearModBase;
+    protected double radiusSmellHear = RADIUS_SMELL_HEAR * smellHearModBase;
     protected int corpseTime;
 
     protected Engines.HungryState hungryState;
@@ -114,30 +114,32 @@ public class UIObject {
         return new UIObject(this);
     }
 
-    protected void loadImage(String maleImagePath, String femaleImagePath, String deadImagePath) {
-        try {
-            maleObjectImage = new Image(getClass().getResourceAsStream(maleImagePath));
-            maleImageLoaded = true;
+    //public static void loadImages(String maleImagePath, String femaleImagePath, String deadImagePath) {
 
-        } catch (Exception e) {
-            System.err.println("Не удалось загрузить изображение: " + e.getMessage());
-            maleImageLoaded = false;
-        }
-        try {
-            femaleObjectImage = new Image(getClass().getResourceAsStream(femaleImagePath));
-            femaleImageLoaded = true;
+//        try {
+//            maleImage = new Image(UIObject.class.getResourceAsStream(maleImagePath));
+//            maleImageLoaded = true;
+//
+//        } catch (Exception e) {
+//            System.err.println("Не удалось загрузить изображение самца: " + e.getMessage());
+//        }
+//        try {
+//            femaleImage = new Image(UIObject.class.getResourceAsStream(maleImagePath));
+//            femaleImageLoaded = true;
+//
+//        } catch (Exception e) {
+//            System.err.println("Не удалось загрузить изображение самки: " + e.getMessage());
+//        }
+//        try {
+//            deadImage = new Image(UIObject.class.getResourceAsStream(maleImagePath));
+//            deadImageLoaded = true;
+//        } catch (Exception e) {
+//            System.err.println("Не удалось загрузить изображения трупа: " + e.getMessage());
+//        }
+    //}
 
-        } catch (Exception e) {
-            System.err.println("Не удалось загрузить изображение: " + e.getMessage());
-            femaleImageLoaded = false;
-        }
-        try {
-            deadObjectImage = new Image(getClass().getResourceAsStream(deadImagePath));
-            deadImageLoaded = true;
-        } catch (Exception e) {
-            System.err.println("Не удалось загрузить изображения трупа: " + e.getMessage());
-            deadImageLoaded = false;
-        }
+    protected Color getColor() {
+        return Color.WHITE;
     }
 
     public static int getCounterObjects() {
@@ -160,6 +162,8 @@ public class UIObject {
 
     public void printObject(GraphicsContext gc, double updateInterval) { }
 
+    public void printThisObject(Class<?> Loader, GraphicsContext gc, double updateInterval) { }
+
     protected Color getStrokeColor() {return Color.BLACK;}
 
     /// ////////////////////////////////////////////////////////
@@ -171,7 +175,7 @@ public class UIObject {
     public double getPartnerX() {return partnerX;}
     public double getPartnerY() {return partnerY;}
 
-    public double getRadiusVision() {return vision;}
+    public double getRadiusSmellHear() {return radiusSmellHear;}
 
     public boolean getPregnant() {return isPregnant;}
 
@@ -428,11 +432,7 @@ public class UIObject {
 //    protected int agilityScore = 20; //ловкость
 
 
-//    // заяц
-//    protected double satietyModifier = 1.5; //модификатор насыщения (для крупных животных - штраф)
-//    protected int nutritionValue = 25; //сытность, хар-т питательность как жертвы
-//    protected int strongScore = 5; //сила
-//    protected int agilityScore = 40; //ловкость
+
 
     // среднее растение
 //    protected double satietyModifier = 0; //модификатор насыщения (для крупных животных - штраф)
@@ -508,7 +508,7 @@ public class UIObject {
             other.setEmotion(FuryEmotion);
         }
 
-        this.setTarget(0, 0, 2 * RADIUS_VISION);
+        this.setTarget(0, 0, 2 * RADIUS_SMELL_HEAR);
     }
 
     public void moveObject(double dirX, double dirY) { }

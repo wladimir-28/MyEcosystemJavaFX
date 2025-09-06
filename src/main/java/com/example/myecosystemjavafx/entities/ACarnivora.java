@@ -16,7 +16,7 @@ public class ACarnivora extends UIObject {
     protected double visionModBase = 1.4;
     protected double speedModFromState = 1;
     protected double speed = SPEED * speedModBase * speedModFromState;
-    protected double vision = RADIUS_VISION * visionModBase;
+    protected double vision = RADIUS_SMELL_HEAR * visionModBase;
     protected int corpseTime = CORPSE_TIME;
     protected EmotionsType emotion = None;
 
@@ -33,12 +33,8 @@ public class ACarnivora extends UIObject {
         return new ACarnivora(this);
     }
 
-    protected Color getCarnivoraColor() {
-        return Color.MAROON;
-    }
-
     @Override
-    public double getRadiusVision() {
+    public double getRadiusSmellHear() {
         return vision;
     }
 

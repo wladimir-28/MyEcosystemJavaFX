@@ -16,7 +16,7 @@ public class AHerbivory extends UIObject {
     protected double speedModFromState = 1;
     protected double visionModBase = 1;
     protected double speed = SPEED * speedModBase * speedModFromState;
-    protected double vision = RADIUS_VISION * visionModBase;
+    protected double vision = RADIUS_SMELL_HEAR * visionModBase;
     protected int corpseTime = CORPSE_TIME;
     protected EmotionsType emotion = None;
 
@@ -33,12 +33,10 @@ public class AHerbivory extends UIObject {
         return new AHerbivory (this);
     }
 
-    protected Color getHerbivoryColor() {
-        return Color.SANDYBROWN;
-    }
+
 
     @Override
-    public double getRadiusVision() {
+    public double getRadiusSmellHear() {
         return vision;
     }
 

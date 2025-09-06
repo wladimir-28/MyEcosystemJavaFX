@@ -4,11 +4,13 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-import static com.example.myecosystemjavafx.Engines.*;
-import static com.example.myecosystemjavafx.Engines.ObjectGender.*;
-import static com.example.myecosystemjavafx.Engines.ObjectMode.*;
+import static com.example.myecosystemjavafx.Engines.BASE_SIZE;
+import static com.example.myecosystemjavafx.Engines.ObjectGender.Female;
+import static com.example.myecosystemjavafx.Engines.ObjectGender.Male;
+import static com.example.myecosystemjavafx.Engines.ObjectMode.Dead;
 
-public class CarnivoraWolf extends ACarnivora {
+
+public class HerbivoryRabbit extends AHerbivory {
 
     protected static  Image maleImage;
     protected static boolean maleImageLoaded = false;
@@ -17,25 +19,20 @@ public class CarnivoraWolf extends ACarnivora {
     protected static Image deadImage;
     protected static boolean deadImageLoaded = false;
 
-    protected final double radius = BASE_SIZE * 0.5;
-    protected final double width = BASE_SIZE * 1.4; //
-    protected final double height = BASE_SIZE * 1.4; //
+    protected final double width = BASE_SIZE * 1.8;
+    protected final double height = BASE_SIZE * 1.8;
     protected final double babyWidth = 0.8 * width;
     protected final double babyHeight = 0.8 * height;
 
-    protected double satietyModifier = 1; //модификатор насыщения (для крупных животных - штраф)
-    protected int nutritionValue = 40; //сытность, хар-т питательность как жертвы
-    protected int strongScore = 30; //сила
-    protected int agilityScore = 20; //ловкость
+    protected double satietyModifier = 1.5; //модификатор насыщения (для крупных животных - штраф)
+    protected int nutritionValue = 25; //сытность, хар-т питательность как жертвы
+    protected int strongScore = 5; //сила
+    protected int agilityScore = 40; //ловкость
 
-    public CarnivoraWolf(){super();}
 
-    public CarnivoraWolf(CarnivoraWolf original) {super(original);}
+    public HerbivoryRabbit(){super();}
 
-    @Override
-    public CarnivoraWolf copy() {
-        return new CarnivoraWolf(this);
-    }
+    public HerbivoryRabbit(HerbivoryRabbit original) {super(original);}
 
     @Override
     public double getSatietyModifier() {return satietyModifier;}
@@ -50,29 +47,34 @@ public class CarnivoraWolf extends ACarnivora {
     public int getAgilityScore() {return agilityScore;}
 
     @Override
-    protected Color getColor() {return Color.MAROON;}
+    public HerbivoryRabbit copy() {
+        return new HerbivoryRabbit(this);
+    }
 
+
+    @Override
+    protected Color getColor() {return Color.GREY;}
 
     public static void loadImages(String maleImagePath, String femaleImagePath, String deadImagePath) {
         try {
-            maleImage = new Image(CarnivoraWolf.class.getResourceAsStream(maleImagePath));
+            maleImage = new Image(HerbivoryRabbit.class.getResourceAsStream(maleImagePath));
             maleImageLoaded = true;
 
         } catch (Exception e) {
-            System.err.println("Не удалось загрузить изображение самца волка: " + e.getMessage());
+            System.err.println("Не удалось загрузить изображение самца кролика: " + e.getMessage());
         }
         try {
-            femaleImage = new Image(CarnivoraWolf.class.getResourceAsStream(femaleImagePath));
+            femaleImage = new Image(HerbivoryRabbit.class.getResourceAsStream(femaleImagePath));
             femaleImageLoaded = true;
 
         } catch (Exception e) {
-            System.err.println("Не удалось загрузить изображение самки волка: " + e.getMessage());
+            System.err.println("Не удалось загрузить изображение самки кролика: " + e.getMessage());
         }
         try {
-            deadImage = new Image(CarnivoraWolf.class.getResourceAsStream(deadImagePath));
+            deadImage = new Image(HerbivoryRabbit.class.getResourceAsStream(deadImagePath));
             deadImageLoaded = true;
         } catch (Exception e) {
-            System.err.println("Не удалось загрузить изображения трупа волка: " + e.getMessage());
+            System.err.println("Не удалось загрузить изображения трупа кролика: " + e.getMessage());
         }
     }
 
@@ -127,6 +129,4 @@ public class CarnivoraWolf extends ACarnivora {
             }
         }
     }
-
-
 }

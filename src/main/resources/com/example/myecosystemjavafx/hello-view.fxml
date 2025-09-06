@@ -2,27 +2,72 @@
 
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="950.0" prefWidth="1600.0" style="-fx-background-color: LIGHTSLATEGRAY;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.myecosystemjavafx.MyEcosystemController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="950.0" prefWidth="1600.0" style="-fx-background-color: GRAY;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.myecosystemjavafx.MyEcosystemController">
    <children>
-      <Label layoutX="572.0" layoutY="442.0" text="Загрузка...">
-         <font>
-            <Font name="Candara Bold" size="29.0" />
-         </font>
-      </Label>
-      <Button fx:id="AddCarnivoraButton" layoutX="50.0" layoutY="15.0" mnemonicParsing="false" onAction="#addCarnivora" prefHeight="25.0" prefWidth="100.0" text="+Хищник" />
-      <Button fx:id="AddHerbivoryButton" layoutX="200.0" layoutY="15.0" mnemonicParsing="false" onAction="#addHerbivory" prefHeight="25.0" prefWidth="100.0" text="+Травоядный" />
-      <Button fx:id="AddPlantButton" layoutX="350.0" layoutY="15.0" mnemonicParsing="false" onAction="#addPlant" prefHeight="25.0" prefWidth="100.0" text="+Растение" />
-      <Canvas fx:id="canvas" height="800.0" layoutX="40.0" layoutY="100.0" width="1520.0" />
-      <Button fx:id="DeleteLastObjectButton" layoutX="510.0" layoutY="15.0" mnemonicParsing="false" onAction="#deleteLastObject" text="Удалить последний" />
-      <Button fx:id="TestCopyButton" layoutX="50.0" layoutY="50.0" mnemonicParsing="false" onAction="#copyCarnivora" prefHeight="25.0" prefWidth="100.0" text="Копия Хищник" />
-      <Button fx:id="AddPlantButtonX5" layoutX="450.0" layoutY="15.0" mnemonicParsing="false" onAction="#addPlantX5" prefHeight="25.0" prefWidth="36.0" text="x5" />
-      <Button fx:id="AddHerbivoryButtonX5" layoutX="300.0" layoutY="15.0" mnemonicParsing="false" onAction="#AddHerbivoryX5" prefHeight="25.0" prefWidth="36.0" text="x5" />
-      <Button fx:id="AddCarnivoraButtonX5" layoutX="150.0" layoutY="15.0" mnemonicParsing="false" onAction="#AddCarnivoraX5" prefHeight="25.0" prefWidth="36.0" text="x5" />
-      <Button fx:id="AddPlantButtonX20" layoutX="450.0" layoutY="40.0" mnemonicParsing="false" onAction="#addPlantX25" prefHeight="25.0" prefWidth="36.0" text="x25" />
-      <Button fx:id="PauseButton" layoutX="710.0" layoutY="15.0" mnemonicParsing="false" onAction="#togglePause" prefHeight="25.0" prefWidth="100.0" text="ПАУЗА" />
+      <Button fx:id="DeleteLastObjectButton" layoutX="938.0" layoutY="52.0" mnemonicParsing="false" onAction="#deleteLastObject" text="Удалить последний" />
+      <Button fx:id="PauseButton" layoutX="1085.0" layoutY="52.0" mnemonicParsing="false" onAction="#togglePause" prefHeight="25.0" prefWidth="100.0" text="ПАУЗА" />
+      <Canvas fx:id="canvas" height="800.0" layoutX="40.0" layoutY="130.0" width="1520.0" />
+      <Pane layoutX="40.0" layoutY="14.0" prefHeight="100.0" prefWidth="267.0" style="-fx-border-color: black;">
+         <children>
+            <RadioButton fx:id="WolfTumbler" layoutX="20.0" layoutY="40.0" mnemonicParsing="false" text="Волк">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </RadioButton>
+            <RadioButton fx:id="CarnivoraTumblerX1" layoutX="110.0" layoutY="8.0" mnemonicParsing="false" text="1" />
+            <RadioButton fx:id="CarnivoraTumblerX5" layoutX="110.0" layoutY="30.0" mnemonicParsing="false" text="5" />
+            <RadioButton fx:id="CarnivoraTumblerX10" layoutX="110.0" layoutY="52.0" mnemonicParsing="false" text="10" />
+            <RadioButton fx:id="CarnivoraTumblerX25" layoutX="110.0" layoutY="74.0" mnemonicParsing="false" text="25" />
+            <Button fx:id="AddCarnivoraButton" layoutX="190.0" layoutY="40.0" mnemonicParsing="false" onAction="#addCarnivora" prefHeight="25.0" prefWidth="36.0" text="+" />
+         </children>
+      </Pane>
+      <Pane layoutX="340.0" layoutY="14.0" prefHeight="100.0" prefWidth="267.0" style="-fx-border-color: black;">
+         <children>
+            <RadioButton fx:id="RabbitTumbler" layoutX="20.0" layoutY="30.0" mnemonicParsing="false" text="Кролик">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </RadioButton>
+            <RadioButton fx:id="HerbivoryTumblerX1" layoutX="110.0" layoutY="8.0" mnemonicParsing="false" text="1" />
+            <RadioButton fx:id="HerbivoryTumblerX5" layoutX="110.0" layoutY="30.0" mnemonicParsing="false" text="5" />
+            <RadioButton fx:id="HerbivoryTumblerX10" layoutX="110.0" layoutY="52.0" mnemonicParsing="false" text="10" />
+            <RadioButton fx:id="HerbivoryTumblerX25" layoutX="110.0" layoutY="74.0" mnemonicParsing="false" text="25" />
+            <Button fx:id="AddHerbivoryButton" layoutX="190.0" layoutY="40.0" mnemonicParsing="false" onAction="#addHerbivory" prefHeight="25.0" prefWidth="36.0" text="+" />
+            <RadioButton fx:id="DeerTumbler" layoutX="20.0" layoutY="52.0" mnemonicParsing="false" text="Олень">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </RadioButton>
+         </children>
+      </Pane>
+      <Pane layoutX="640.0" layoutY="14.0" prefHeight="100.0" prefWidth="267.0" style="-fx-border-color: black;">
+         <children>
+            <RadioButton fx:id="TreeTumbler" layoutX="20.0" layoutY="62.0" mnemonicParsing="false" text="Дерево">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </RadioButton>
+            <RadioButton fx:id="PlantTumblerX1" layoutX="110.0" layoutY="8.0" mnemonicParsing="false" text="1" />
+            <RadioButton fx:id="PlantTumblerX5" layoutX="110.0" layoutY="30.0" mnemonicParsing="false" text="5" />
+            <RadioButton fx:id="PlantTumblerX10" layoutX="110.0" layoutY="52.0" mnemonicParsing="false" text="10" />
+            <RadioButton fx:id="PlantTumblerX25" layoutX="110.0" layoutY="74.0" mnemonicParsing="false" text="25" />
+            <Button fx:id="AddPlantButton" layoutX="190.0" layoutY="40.0" mnemonicParsing="false" onAction="#addPlant" prefHeight="25.0" prefWidth="36.0" text="+" />
+            <RadioButton fx:id="BushTumbler" layoutX="20.0" layoutY="40.0" mnemonicParsing="false" text="Куст">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </RadioButton>
+            <RadioButton fx:id="HerbTumbler" layoutX="20.0" layoutY="18.0" mnemonicParsing="false" text="Кустик">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </RadioButton>
+         </children>
+      </Pane>
    </children>
 </AnchorPane>

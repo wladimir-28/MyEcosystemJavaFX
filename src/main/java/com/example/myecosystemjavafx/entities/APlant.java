@@ -10,10 +10,6 @@ public class APlant extends UIObject {
     protected int corpseTime = PLANT_REBIRTH_TIME;
     protected boolean isPregnant = false;
 
-    protected Color getPlantColor() {
-        return Color.SEAGREEN;
-    }
-
     public APlant() {
         super();
     }
