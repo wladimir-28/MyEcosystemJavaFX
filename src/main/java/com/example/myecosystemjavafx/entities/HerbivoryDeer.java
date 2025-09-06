@@ -68,6 +68,7 @@ public class HerbivoryDeer extends AHerbivory {
             femaleImage = new Image(HerbivoryDeer.class.getResourceAsStream(femaleImagePath));
             femaleImageLoaded = true;
 
+
         } catch (Exception e) {
             System.err.println("Не удалось загрузить изображение самки оленя: " + e.getMessage());
         }
