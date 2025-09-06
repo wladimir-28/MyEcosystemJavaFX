@@ -112,7 +112,11 @@ public class HerbivoryDeer extends AHerbivory {
                 );
             } else {
                 gc.setFill(getColor());
-                gc.fillRect((centerX - height / 2), (centerY - width / 2), width / 2, height /2);
+                gc.fillRect((getInterX() - height / 2), (getInterY() - width / 2), width / 2, height /2);
+                // контур:
+                gc.setStroke(getStrokeColor());
+                gc.setLineWidth(1);
+                gc.strokeRect(getInterX() - height / 2, getInterY() - width / 2, width / 2, height / 2);
             }
         }
         else {
@@ -127,7 +131,7 @@ public class HerbivoryDeer extends AHerbivory {
             } else {
                 gc.setStroke(getStrokeColor());
                 gc.setLineWidth(1);
-                gc.strokeRect(centerX - height / 2, centerY - width / 2, width / 2, height / 2);
+                gc.strokeRect(getInterX() - height / 2, getInterY() - width / 2, width / 2, height / 2);
             }
         }
     }

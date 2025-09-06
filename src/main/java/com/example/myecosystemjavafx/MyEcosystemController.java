@@ -7,7 +7,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -28,9 +28,14 @@ public class MyEcosystemController {
     private Image winterBackgroundImage;
     private Image springBackgroundImage;
     private Image currentBackgroundImage;
-
+    private final Color SUMMER_RESERVE_COLOR = Color.GREENYELLOW;
+    private final Color AUTUMN_RESERVE_COLOR = Color.GOLD;
+    private final Color WINTER_RESERVE_COLOR = Color.LIGHTCYAN;
+    private final Color SPRING_RESERVE_COLOR = Color.PERU;
+    private Color currentReserveColor = SPRING_RESERVE_COLOR;
     private static SeasonsOfYear seasonOfYear = Spring;
     private boolean backgroundImageLoaded = false;
+
     private static ArrayList<UIObject> objectsList = new ArrayList<>();
     private AnimationTimer animationTimer;
     private boolean isPaused = false;
@@ -38,14 +43,14 @@ public class MyEcosystemController {
     private long lastLifeUpdate = 0;
     private long lastSeasonUpdate = 0;
     private long lastYearsUpdate = 0;
+    private long lastFrameTime = 0;
+    private long accumulatedTime = 0;
     private double alpha = 0.0;
     private final long LIFE_UPDATE_INTERVAL = 1_000_000_000L;
     private final long SEASON_INTERVAL = SECOND_IN_SEASON * 1_000_000_000L;
     private final long YEAR_INTERVAL = SECOND_IN_SEASON * 4_000_000_000L;
 
-    public static SeasonsOfYear getSeasonOfYear() {
-        return seasonOfYear;
-    }
+    public static SeasonsOfYear getSeasonOfYear() {return seasonOfYear;}
 
     @FXML
     private void initialize() {
@@ -76,18 +81,23 @@ public class MyEcosystemController {
         if (seasonOfYear == Spring) {
             seasonOfYear = Summer;
             currentBackgroundImage = summerBackgroundImage;
+            currentReserveColor = SUMMER_RESERVE_COLOR;
         }
         else if (seasonOfYear == Summer) {
             seasonOfYear = Autumn;
             currentBackgroundImage = autumnBackgroundImage;
+            currentReserveColor = AUTUMN_RESERVE_COLOR;
         }
         else if (seasonOfYear == Autumn) {
             seasonOfYear = Winter;
             currentBackgroundImage = winterBackgroundImage;
+            currentReserveColor = WINTER_RESERVE_COLOR;
         }
         else {
             seasonOfYear = Spring;
-            currentBackgroundImage = springBackgroundImage;}
+            currentBackgroundImage = springBackgroundImage;
+            currentReserveColor = SPRING_RESERVE_COLOR;
+        }
     }
 
     protected void nextYear() {
@@ -101,7 +111,6 @@ public class MyEcosystemController {
             if (object.getAge() < 5) {
                 continue;
             }
-
             double random = Math.random();
             double deathProbability = getDeathProbability(object.getAge(), object.getLongevity());
 
@@ -114,11 +123,11 @@ public class MyEcosystemController {
 
     private double getDeathProbability(int age, double longevity) {
         switch (age) {
-            case 5: return 0.025 * (1/longevity);
-            case 6: return 0.05 * (1/longevity);
-            case 7: return 0.075 * (1/longevity);
-            case 8: return 0.1 * (1/longevity);
-            case 9: return 0.125 * (1/longevity);
+            case 5: return 0.015 * (1/longevity);
+            case 6: return 0.03 * (1/longevity);
+            case 7: return 0.05 * (1/longevity);
+            case 8: return 0.08 * (1/longevity);
+            case 9: return 0.11 * (1/longevity);
             case 10: return 0.15 * (1/longevity);
             case 11: return 0.175 * (1/longevity);
             case 12: return 0.2 * (1/longevity);
@@ -144,15 +153,14 @@ public class MyEcosystemController {
             gc.clearRect(0, 0, CANVAS_WIDTH, Engines.CANVAS_HEIGHT);
             gc.drawImage(currentBackgroundImage, 0, 0, canvas.getWidth(), canvas.getHeight());
         } else {
-            gc.setFill(Color.FORESTGREEN);
+            gc.setFill(currentReserveColor);
             gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         }
     }
 
     private void setupAnimationTimer() {
         animationTimer = new AnimationTimer() {
-            private long lastFrameTime = 0;
-            private long accumulatedTime = 0;
+
 
             @Override
             public void handle(long now) {
@@ -223,9 +231,17 @@ public class MyEcosystemController {
     public void resumeAnimation() {
         isPaused = false;
         long currentTime = System.nanoTime();
+        lastFrameTime = currentTime;
         lastUpdateTime = currentTime;
         lastLifeUpdate = currentTime;
         lastSeasonUpdate = currentTime;
+        lastYearsUpdate = currentTime;
+        accumulatedTime = 0;
+
+        if (animationTimer != null) {
+            animationTimer.stop();
+            animationTimer.start();
+        }
     }
 
     private void drawPauseIndicator() {
@@ -248,7 +264,7 @@ public class MyEcosystemController {
             object.checkState();            // проверка показателей голода и энергии
             searchTargetDanger(object, objectsList); // проверка окружения и идентификация целей и опасностей
             object.selectObjectMode();      // выбор поведения
-            object.giveBuffDebuff();        // баффы дебаффы на скорость
+            object.giveBuffDebuff();        // баффы дебаффы на скорость и радиус видимости
             object.actionObject();        // опредедение направления движения и движение по факту
             interact(object, objectsList, RADIUS_INTERACTION); // взаимодействия (втч убийства)
             object.getInfo();
@@ -260,21 +276,25 @@ public class MyEcosystemController {
         if (thisObject instanceof APlant || thisObject.getObjectMode() == Dead ) {return;}
         boolean foundDanger = false;
 
+        double minTargetDistance = BIG_RADIUS_VISION;
+        double minPartnerDistance = BIG_RADIUS_VISION;
         for (UIObject other : objectsList) {
-            if (other != thisObject && other.getObjectMode() != Dead && thisObject.isInRadius(other, thisObject.getRadiusSmellHear())) {
+            if (other != thisObject && other.getObjectMode() != Dead && thisObject.isInRadius(other, thisObject.getBigRadiusVision())) {
                 double distance = Engines.calculateDistance(thisObject.getCenterX(), thisObject.getCenterY(), other.getCenterX(), other.getCenterY());
 
-                if (thisObject.isTarget(other) && (distance <= thisObject.getTargetDistance())) { // идентификация увиденного
-                    thisObject.setTarget(other.getCenterX(), other.getCenterY(), distance);
+                if (thisObject.isTarget(other) && distance < minTargetDistance) {
+                    minTargetDistance = distance;
+                    thisObject.setTarget(other.getCenterX(), other.getCenterY());
                 }
 
-                if (thisObject.isItPartner(other) && (distance <= thisObject.getPartnerDistance())) { // идентификация увиденного
+                if (thisObject.isItPartner(other) && distance <= minPartnerDistance) { // идентификация увиденного
+                    minPartnerDistance = distance;
                     thisObject.setPartner(other.getCenterX(), other.getCenterY(), distance);
                 }
 
                 if (thisObject.isDanger(other)) {
                     thisObject.setDanger(other.getCenterX(), other.getCenterY());
-                    if (thisObject.isInRadius(other, RADIUS_VISION)) {
+                    if (thisObject.isInRadius(other, SMALL_RADIUS_VISION)  && other.isSenseDanger()) {
                         thisObject.setDangerState(Danger);
                         foundDanger = true;
                     }
@@ -303,16 +323,23 @@ public class MyEcosystemController {
         }
     }
 
-    public static void shareFood(UIObject thisObject, int satyety) {
+    public static void shareFood(UIObject thisObject, int satiety) {
+        int counter = 0;
         for (UIObject other : objectsList) {
+            if (counter == MAX_NUMBER_FOODSHARER) {break;}
             if (other != thisObject &&  thisObject.getClass().equals(other.getClass()) && thisObject.isInRadius(other, SHARE_FOOD_DISTANCE)) {
-                other.addSatiety(satyety);
-                System.out.println("Разделили добычу");
+                if (counter == 0) {
+                    other.addSatiety((int) (satiety * 0.5));
+                } else if (counter == 1) {
+                    other.addSatiety((int) (satiety * 0.25));
+                } else {
+                    other.addSatiety((int) (satiety * 0.1));
+                }
+                counter += 1;
+                //System.out.println("Разделили добычу");
             }
         }
     }
-
-
 
     public void deleteCorpses() {
         Iterator<UIObject> iterator = objectsList.iterator();
@@ -326,91 +353,176 @@ public class MyEcosystemController {
         }
     }
 
-
-
     @FXML
     private Canvas canvas;
     private GraphicsContext gc;
 
-//    private class ACarnivoraType; ?
-//    private int ACarnivoraQt;
-
+    @FXML
+    private Button AddCarnivoraButton2;
 
     @FXML
-    private Button PauseButton;
+    private Button AddCarnivoraButton2X10;
 
     @FXML
-    private Button AddCarnivoraButton;
+    private Button AddCarnivoraButton2X25;
 
     @FXML
-    private Button AddCarnivoraButtonX5;
+    private Button AddCarnivoraButton2X5;
 
     @FXML
-    private Button AddHerbivoryButton;
+    private Button AddCarnivoraButton3;
 
     @FXML
-    private Button AddHerbivoryButtonX5;
+    private Button AddCarnivoraButton3X10;
 
     @FXML
-    private Button AddPlantButton;
+    private Button AddCarnivoraButton3X25;
 
     @FXML
-    private Button AddPlantButtonX5;
+    private Button AddCarnivoraButton3X5;
 
     @FXML
-    private Button AddPlantButtonX25;
+    private Button AddDeerButton;
+
+    @FXML
+    private Button AddDeerButtonX10;
+
+    @FXML
+    private Button AddDeerButtonX25;
+
+    @FXML
+    private Button AddDeerButtonX5;
+
+    @FXML
+    private Button AddHerbivoryButton3;
+
+    @FXML
+    private Button AddHerbivoryButton3X10;
+
+    @FXML
+    private Button AddHerbivoryButton3X25;
+
+    @FXML
+    private Button AddHerbivoryButton3X5;
+
+    @FXML
+    private Button AddPlantButton2;
+
+    @FXML
+    private Button AddPlantButton2X10;
+
+    @FXML
+    private Button AddPlantButton2X25;
+
+    @FXML
+    private Button AddPlantButton2X5;
+
+    @FXML
+    private Button AddPlantButton3;
+
+    @FXML
+    private Button AddPlantButton3X10;
+
+    @FXML
+    private Button AddPlantButton3X25;
+
+    @FXML
+    private Button AddPlantButton3X5;
+
+    @FXML
+    private Button AddRabbitButton;
+
+    @FXML
+    private Button AddRabbitButtonX10;
+
+    @FXML
+    private Button AddRabbitButtonX25;
+
+    @FXML
+    private Button AddRabbitButtonX5;
+
+    @FXML
+    private Button AddTreeButton;
+
+    @FXML
+    private Button AddTreeButtonX10;
+
+    @FXML
+    private Button AddTreeButtonX25;
+
+    @FXML
+    private Button AddTreeButtonX5;
+
+    @FXML
+    private Button AddWolfButton;
+
+    @FXML
+    private Button AddWolfButtonX10;
+
+    @FXML
+    private Button AddWolfButtonX25;
+
+    @FXML
+    private Button AddWolfButtonX5;
 
     @FXML
     private Button DeleteLastObjectButton;
 
     @FXML
-    private Button TestCopyButton;
+    private Button PauseButton;
 
     @FXML
-    private BorderPane root;
+    void addWolf(ActionEvent event) {addWolfs(1);}
 
     @FXML
-    void togglePause() {
-        if (isPaused) {
-            resumeAnimation();
-        } else {
-            pauseAnimation();
-        }
-    }
+    void AddWolfX5(ActionEvent event) {addWolfs(5);}
 
     @FXML
-    void addCarnivora(ActionEvent event) {
-        addCarnivoras(1);
-    }
+    void AddWolfX10(ActionEvent event) {addWolfs(10);}
 
     @FXML
-    void addHerbivory(ActionEvent event) {
-        addHerbivores(1);
-    }
+    void AddWolfX25(ActionEvent event) {addWolfs(25);}
+
+    /// /////////////////////////////////////////////
 
     @FXML
-    void addPlant(ActionEvent event) {
-        addPlants(1);
-
-    }
-    @FXML
-    void AddCarnivoraX5(ActionEvent event) {
-        addCarnivoras(5);
-    }
+    void addDeer(ActionEvent event) {addDeers(1);}
 
     @FXML
-    void AddHerbivoryX5(ActionEvent event) {
-        addHerbivores(5);
-    }
-    @FXML
-    void addPlantX5(ActionEvent event) {
-        addPlants(5);
-    }
+    void addDeerX5(ActionEvent event) {addDeers(5);}
 
     @FXML
-    void addPlantX25(ActionEvent event) {
-        addPlants(25);
-    }
+    void addDeerX10(ActionEvent event) {addDeers(10);}
+
+    @FXML
+    void addDeerX25(ActionEvent event) {addDeers(25);}
+
+    @FXML
+    void addRabbit(ActionEvent event) {addRabbits(1);}
+
+    @FXML
+    void addRabbitX5(ActionEvent event) {addRabbits(5);}
+
+    @FXML
+    void addRabbitX10(ActionEvent event) {addRabbits(10);}
+
+    @FXML
+    void addRabbitX25(ActionEvent event) {addRabbits(25);}
+
+    /// ////////////////////////////////////////////////////////
+    @FXML
+    void addTree(ActionEvent event) {addTrees(1);}
+
+    @FXML
+    void AddTreeX5(ActionEvent event) {addTrees(5);}
+
+    @FXML
+    void AddTreeX10(ActionEvent event) {addTrees(10);}
+
+    @FXML
+    void addTreeX25(ActionEvent event) {addTrees(25);}
+
+    /// ///////////////////////////////////////////////////////////////////
 
     @FXML
     void deleteLastObject(ActionEvent event) {
@@ -420,19 +532,34 @@ public class MyEcosystemController {
         }
     }
 
-    void addCarnivoras(int countCarnivoras) {
+    @FXML
+    void togglePause(ActionEvent event) {
+        if (isPaused) {
+            resumeAnimation();
+        } else {
+            pauseAnimation();
+        }
+    }
+
+    void addWolfs(int countCarnivoras) {
         for (int i = 0; i < countCarnivoras; i++) {
             objectsList.add(UIObject.getCounterObjects(), new CarnivoraWolf());
         }
     }
 
-    void addHerbivores(int countHerbivores) {
+    void addDeers(int countHerbivores) {
         for (int i = 0; i < countHerbivores; i++) {
             objectsList.add(UIObject.getCounterObjects(), new HerbivoryDeer());
         }
     }
 
-    void addPlants(int countPlants) {
+    void addRabbits(int countHerbivores) {
+        for (int i = 0; i < countHerbivores; i++) {
+            objectsList.add(UIObject.getCounterObjects(), new HerbivoryRabbit());
+        }
+    }
+
+    void addTrees(int countPlants) {
         for (int i = 0; i < countPlants; i++) {
             objectsList.add(UIObject.getCounterObjects(), new PlantTree());
         }

@@ -1,7 +1,6 @@
 package com.example.myecosystemjavafx.entities;
 
 import com.example.myecosystemjavafx.MyEcosystemController;
-import javafx.scene.paint.Color;
 
 import static com.example.myecosystemjavafx.Engines.*;
 import static com.example.myecosystemjavafx.Engines.DangerState.Danger;
@@ -12,11 +11,15 @@ import static com.example.myecosystemjavafx.Engines.ObjectMode.*;
 
 public class AHerbivory extends UIObject {
 
-    protected double speedModBase = 1;
+    protected double speedModBase = HERBIVORY_SPEED_MOD_BASE;
     protected double speedModFromState = 1;
-    protected double visionModBase = 1;
     protected double speed = SPEED * speedModBase * speedModFromState;
-    protected double vision = RADIUS_SMELL_HEAR * visionModBase;
+
+
+    protected double smallRadiusModBase = HERBIVORY_VISION_MOD_BASE;
+    protected double smallRadiusModState = 1;
+    protected double smallRadiusVision = SMALL_RADIUS_VISION * smallRadiusModBase * smallRadiusModState;
+
     protected int corpseTime = CORPSE_TIME;
     protected EmotionsType emotion = None;
 
@@ -33,11 +36,14 @@ public class AHerbivory extends UIObject {
         return new AHerbivory (this);
     }
 
-
+    @Override
+    public double getBigRadiusVision() {
+        return bigRadiusVision;
+    }
 
     @Override
-    public double getRadiusSmellHear() {
-        return vision;
+    public double getSmallRadiusVision() {
+        return smallRadiusVision;
     }
 
     @Override
@@ -68,6 +74,9 @@ public class AHerbivory extends UIObject {
 
         speedModFromState = dangerMod * hungryMod * energyMod;
         speed = SPEED * speedModBase * seasonMod * speedModFromState;
+
+        smallRadiusModState = dangerMod * hungryMod * energyMod;
+        smallRadiusVision = SMALL_RADIUS_VISION * smallRadiusModBase * smallRadiusModState;
     }
 
     @Override
@@ -112,5 +121,3 @@ public class AHerbivory extends UIObject {
         } else {return false;}
     }
 }
-
-

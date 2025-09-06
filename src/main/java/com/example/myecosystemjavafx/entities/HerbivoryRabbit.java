@@ -5,8 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import static com.example.myecosystemjavafx.Engines.BASE_SIZE;
-import static com.example.myecosystemjavafx.Engines.ObjectGender.Female;
-import static com.example.myecosystemjavafx.Engines.ObjectGender.Male;
+import static com.example.myecosystemjavafx.Engines.ObjectGender.*;
 import static com.example.myecosystemjavafx.Engines.ObjectMode.Dead;
 
 
@@ -19,15 +18,19 @@ public class HerbivoryRabbit extends AHerbivory {
     protected static Image deadImage;
     protected static boolean deadImageLoaded = false;
 
-    protected final double width = BASE_SIZE * 1.8;
-    protected final double height = BASE_SIZE * 1.8;
+    protected double longevity = 1.5;
+
+    protected final double width = BASE_SIZE * 1.4; //
+    protected final double height = BASE_SIZE * 1.4; //
     protected final double babyWidth = 0.8 * width;
     protected final double babyHeight = 0.8 * height;
+
+    protected int maxNumberOfChildren = 3;
 
     protected double satietyModifier = 1.5; //модификатор насыщения (для крупных животных - штраф)
     protected int nutritionValue = 25; //сытность, хар-т питательность как жертвы
     protected int strongScore = 5; //сила
-    protected int agilityScore = 40; //ловкость
+    protected int agilityScore = 35; //ловкость
 
 
     public HerbivoryRabbit(){super();}
@@ -47,13 +50,18 @@ public class HerbivoryRabbit extends AHerbivory {
     public int getAgilityScore() {return agilityScore;}
 
     @Override
+    protected int getMaxNumberOfChildren() {return maxNumberOfChildren;}
+
+    @Override
+    public double getLongevity() {return longevity;}
+
+    @Override
     public HerbivoryRabbit copy() {
         return new HerbivoryRabbit(this);
     }
 
-
     @Override
-    protected Color getColor() {return Color.GREY;}
+    protected Color getColor() {return Color.LIGHTGREY;}
 
     public static void loadImages(String maleImagePath, String femaleImagePath, String deadImagePath) {
         try {
@@ -110,7 +118,11 @@ public class HerbivoryRabbit extends AHerbivory {
                 );
             } else {
                 gc.setFill(getColor());
-                gc.fillRect((centerX - height / 2), (centerY - width / 2), width / 2, height /2);
+                gc.fillRect((getInterX() - height / 2), (getInterY() - width / 2), width / 2, height /2);
+                // контур:
+                gc.setStroke(getStrokeColor());
+                gc.setLineWidth(1);
+                gc.strokeRect(getInterX() - height / 2, getInterY() - width / 2, width / 2, height / 2);
             }
         }
         else {
@@ -125,7 +137,7 @@ public class HerbivoryRabbit extends AHerbivory {
             } else {
                 gc.setStroke(getStrokeColor());
                 gc.setLineWidth(1);
-                gc.strokeRect(centerX - height / 2, centerY - width / 2, width / 2, height / 2);
+                gc.strokeRect(getInterX() - height / 2, getInterY() - width / 2, width / 2, height / 2);
             }
         }
     }

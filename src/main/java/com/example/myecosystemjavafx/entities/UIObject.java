@@ -3,7 +3,6 @@ package com.example.myecosystemjavafx.entities;
 import com.example.myecosystemjavafx.Engines;
 import com.example.myecosystemjavafx.MyEcosystemController;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.util.Random;
@@ -26,13 +25,6 @@ public class UIObject {
     protected boolean isPregnant = false;
     protected int maxNumberOfChildren = 1;
 
-//    protected static  Image maleImage;
-//    protected static boolean maleImageLoaded = false;
-//    protected static Image femaleImage;
-//    protected static boolean femaleImageLoaded = false;
-//    protected static Image deadImage;
-//    protected static boolean deadImageLoaded = false;
-
     protected double centerX;
     protected double centerY;
 
@@ -47,7 +39,6 @@ public class UIObject {
 
     protected double targetX = 0;
     protected double targetY = 0;
-    protected double targetDistance = 2 * RADIUS_SMELL_HEAR;
 
     protected double dangerX = 0;
     protected double dangerY = 0;
@@ -55,9 +46,9 @@ public class UIObject {
 
     protected double partnerX = 0;
     protected double partnerY = 0;
-    protected double partnerDistance = 2 * RADIUS_SMELL_HEAR;
+    protected double partnerDistance = 2 * BIG_RADIUS_VISION;
 
-    protected final int MAX_SATIETY = 60;
+    protected int maxSatiety = 60;
     protected int satiety = 40;// пока что хардкод
     protected final int MAX_ENERGY = 30;
     protected int energy = 30;// пока что хардкод
@@ -71,8 +62,11 @@ public class UIObject {
     protected double speedModFromState = 1;
     protected double speed;
 
-    protected double smellHearModBase;
-    protected double radiusSmellHear = RADIUS_SMELL_HEAR * smellHearModBase;
+    protected double bigRadiusVision = BIG_RADIUS_VISION;
+    protected double smallRadiusModBase;
+    protected double smallRadiusModState = 1;
+    protected double smallRadiusVision = SMALL_RADIUS_VISION * smallRadiusModBase * smallRadiusModState;
+
     protected int corpseTime;
 
     protected Engines.HungryState hungryState;
@@ -114,30 +108,6 @@ public class UIObject {
         return new UIObject(this);
     }
 
-    //public static void loadImages(String maleImagePath, String femaleImagePath, String deadImagePath) {
-
-//        try {
-//            maleImage = new Image(UIObject.class.getResourceAsStream(maleImagePath));
-//            maleImageLoaded = true;
-//
-//        } catch (Exception e) {
-//            System.err.println("Не удалось загрузить изображение самца: " + e.getMessage());
-//        }
-//        try {
-//            femaleImage = new Image(UIObject.class.getResourceAsStream(maleImagePath));
-//            femaleImageLoaded = true;
-//
-//        } catch (Exception e) {
-//            System.err.println("Не удалось загрузить изображение самки: " + e.getMessage());
-//        }
-//        try {
-//            deadImage = new Image(UIObject.class.getResourceAsStream(maleImagePath));
-//            deadImageLoaded = true;
-//        } catch (Exception e) {
-//            System.err.println("Не удалось загрузить изображения трупа: " + e.getMessage());
-//        }
-    //}
-
     protected Color getColor() {
         return Color.WHITE;
     }
@@ -175,7 +145,14 @@ public class UIObject {
     public double getPartnerX() {return partnerX;}
     public double getPartnerY() {return partnerY;}
 
-    public double getRadiusSmellHear() {return radiusSmellHear;}
+    public double getTargetX() {return targetX;}
+    public double getTargetY() {return targetY;}
+
+    public double getBigRadiusVision() {return bigRadiusVision;}
+
+    public double getSmallRadiusVision() {
+        return smallRadiusVision;
+    }
 
     public boolean getPregnant() {return isPregnant;}
 
@@ -185,15 +162,18 @@ public class UIObject {
 
     public double getLongevity() {return longevity;}
 
+    public int getMaxSatiety() {
+        return maxSatiety;
+    }
+
     public double getSatietyModifier() {return satietyModifier;}
     public int getNutritionValue() {return nutritionValue;}
     public int getStrongScore() {return strongScore;}
     public int getAgilityScore() {return agilityScore;}
 
-    public void setTarget(double x, double y, double distance) {
+    public void setTarget(double x, double y) {
         targetX = x;
         targetY = y;
-        targetDistance = distance;
     }
 
     public void setPartner(double x, double y, double distance) {
@@ -203,8 +183,6 @@ public class UIObject {
     }
 
     public void setPregnant(boolean value) {isPregnant = value;}
-
-    public double getTargetDistance() {return targetDistance;}
 
     public double getPartnerDistance() {return partnerDistance;}
 
@@ -232,7 +210,7 @@ public class UIObject {
     public void addSatiety(int term) {
         satiety = satiety + term;
         if (satiety < 0) { satiety = 0;}
-        if (satiety > MAX_SATIETY) { satiety = MAX_SATIETY;}
+        if (satiety > getMaxSatiety()) { satiety = getMaxSatiety();}
     }
 
     public void addAge(int term) {age += term;}
@@ -255,9 +233,14 @@ public class UIObject {
     public boolean checkHungryDead() {return satiety == 0;}
 
     public void checkState() {
-        if (satiety < MAX_SATIETY * 0.2)                                        {hungryState = VeryHungry;}
-        else if (satiety >= MAX_SATIETY * 0.2 && satiety < MAX_SATIETY * 0.6)   {hungryState = Hungry;}
-        else if (satiety >= MAX_SATIETY * 0.6 )                                 {hungryState = Full;}
+        if (checkHungryDead())                                                  {
+            objectMode = Dead;
+            System.out.println("Умер от голода");
+        }
+
+        if (satiety < getMaxSatiety() * 0.2)                                        {hungryState = VeryHungry;}
+        else if (satiety >= getMaxSatiety() * 0.2 && satiety < getMaxSatiety() * 0.6)   {hungryState = Hungry;}
+        else if (satiety >= getMaxSatiety() * 0.6 )                                 {hungryState = Full;}
         //System.out.println(hungryState);
 
         if (energy < MAX_ENERGY * 0.2)                                      {energyState = VeryLowEnergy;}
@@ -432,8 +415,6 @@ public class UIObject {
 //    protected int agilityScore = 20; //ловкость
 
 
-
-
     // среднее растение
 //    protected double satietyModifier = 0; //модификатор насыщения (для крупных животных - штраф)
 //    protected int nutritionValue = 50; //сытность, хар-т питательность как жертвы
@@ -490,7 +471,7 @@ public class UIObject {
             double satietyGain = this.getSatietyModifier() * other.getNutritionValue();
             this.addSatiety((int)satietyGain); // + 50 было
             other.setObjectMode(Dead);
-            MyEcosystemController.shareFood(this, (int)(satietyGain * 0.6)); //поделить добычу !
+            MyEcosystemController.shareFood(this, (int)(satietyGain)); //поделить добычу !
             if (this instanceof ACarnivora) {
                 this.setEmotion(JawsEmotion);
             }
@@ -508,7 +489,7 @@ public class UIObject {
             other.setEmotion(FuryEmotion);
         }
 
-        this.setTarget(0, 0, 2 * RADIUS_SMELL_HEAR);
+        this.setTarget(0, 0);
     }
 
     public void moveObject(double dirX, double dirY) { }
@@ -516,6 +497,14 @@ public class UIObject {
     public boolean isTarget(UIObject other) { return false;}
 
     public boolean isDanger(UIObject other) { return false;}
+
+    public boolean isSenseDanger() {
+        if (CHANCE_OF_SENSING_DANGER  <= 0) {return false;}
+        if (CHANCE_OF_SENSING_DANGER  >= 100) {return true;}
+
+        int randomValue = (int)(Math.random() * 100);
+        return randomValue < CHANCE_OF_SENSING_DANGER ;
+    }
 
     public boolean isCorpseDelete() {return false;}
 }

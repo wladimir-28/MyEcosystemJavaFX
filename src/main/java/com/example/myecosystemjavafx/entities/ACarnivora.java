@@ -1,7 +1,6 @@
 package com.example.myecosystemjavafx.entities;
 
 import com.example.myecosystemjavafx.MyEcosystemController;
-import javafx.scene.paint.Color;
 
 import static com.example.myecosystemjavafx.Engines.*;
 import static com.example.myecosystemjavafx.Engines.DangerState.*;
@@ -12,11 +11,14 @@ import static com.example.myecosystemjavafx.Engines.ObjectMode.*;
 
 public class ACarnivora extends UIObject {
 
-    protected double speedModBase = 1.3;
-    protected double visionModBase = 1.4;
+    protected double speedModBase = CARNIVORA_SPEED_MOD_BASE;
     protected double speedModFromState = 1;
     protected double speed = SPEED * speedModBase * speedModFromState;
-    protected double vision = RADIUS_SMELL_HEAR * visionModBase;
+
+    protected double smallRadiusModBase = CARNIVORA_VISION_MOD_BASE;
+    protected double smallRadiusModState = 1;
+    protected double smallRadiusVision = SMALL_RADIUS_VISION * smallRadiusModBase * smallRadiusModState;
+
     protected int corpseTime = CORPSE_TIME;
     protected EmotionsType emotion = None;
 
@@ -34,8 +36,13 @@ public class ACarnivora extends UIObject {
     }
 
     @Override
-    public double getRadiusSmellHear() {
-        return vision;
+    public double getBigRadiusVision() {
+        return bigRadiusVision;
+    }
+
+    @Override
+    public double getSmallRadiusVision() {
+        return smallRadiusVision;
     }
 
     @Override
@@ -45,6 +52,7 @@ public class ACarnivora extends UIObject {
         //System.out.println("Mode: " + objectMode);
         //System.out.println("danger x y: " + "\t" + dangerX + "\t" + dangerY);
         //System.out.println("Скорость: " + speed);
+        //System.out.println(getTargetX() + " " + getTargetY());
 
     }
 
@@ -66,6 +74,11 @@ public class ACarnivora extends UIObject {
 
         speedModFromState = dangerMod * hungryMod * energyMod;
         speed = SPEED * speedModBase * seasonMod * speedModFromState;
+
+        smallRadiusModState = dangerMod * hungryMod * energyMod;
+        smallRadiusVision = SMALL_RADIUS_VISION * smallRadiusModBase * smallRadiusModState;
+
+
     }
 
     @Override

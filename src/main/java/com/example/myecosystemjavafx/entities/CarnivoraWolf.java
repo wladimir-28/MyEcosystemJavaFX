@@ -17,9 +17,13 @@ public class CarnivoraWolf extends ACarnivora {
     protected static Image deadImage;
     protected static boolean deadImageLoaded = false;
 
+    protected final int maxSatiety = 75;
+
+    protected int maxNumberOfChildren = 2;
+
     protected final double radius = BASE_SIZE * 0.5;
-    protected final double width = BASE_SIZE * 1.4; //
-    protected final double height = BASE_SIZE * 1.4; //
+    protected final double width = BASE_SIZE * 1.8;
+    protected final double height = BASE_SIZE * 1.8;
     protected final double babyWidth = 0.8 * width;
     protected final double babyHeight = 0.8 * height;
 
@@ -50,7 +54,13 @@ public class CarnivoraWolf extends ACarnivora {
     public int getAgilityScore() {return agilityScore;}
 
     @Override
-    protected Color getColor() {return Color.MAROON;}
+    protected int getMaxNumberOfChildren() {return maxNumberOfChildren;}
+
+    @Override
+    public int getMaxSatiety() {return maxSatiety;}
+
+    @Override
+    protected Color getColor() {return Color.DIMGRAY;}
 
 
     public static void loadImages(String maleImagePath, String femaleImagePath, String deadImagePath) {
@@ -80,6 +90,7 @@ public class CarnivoraWolf extends ACarnivora {
     public void printObject(GraphicsContext gc, double alpha) {
         interpolatedX(alpha);
         interpolatedY(alpha);
+
         if (objectMode != Dead) {
             if (getAge() < 1 && femaleImageLoaded == true) {
                 gc.drawImage(
@@ -108,7 +119,11 @@ public class CarnivoraWolf extends ACarnivora {
                 );
             } else {
                 gc.setFill(getColor());
-                gc.fillRect((centerX - height / 2), (centerY - width / 2), width / 2, height /2);
+                gc.fillRect((getInterX() - height / 2), (getInterY() - width / 2), width / 2, height /2);
+                //
+                gc.setStroke(getStrokeColor());
+                gc.setLineWidth(1);
+                gc.strokeRect(getInterX() - height / 2, getInterY() - width / 2, width / 2, height / 2);
             }
         }
         else {
@@ -123,10 +138,8 @@ public class CarnivoraWolf extends ACarnivora {
             } else {
                 gc.setStroke(getStrokeColor());
                 gc.setLineWidth(1);
-                gc.strokeRect(centerX - height / 2, centerY - width / 2, width / 2, height / 2);
+                gc.strokeRect(getInterX() - height / 2, getInterY() - width / 2, width / 2, height / 2);
             }
         }
     }
-
-
 }

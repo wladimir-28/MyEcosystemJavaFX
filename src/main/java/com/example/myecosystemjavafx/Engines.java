@@ -8,14 +8,24 @@ public class Engines {
     public static final int SECOND_IN_SEASON = 5;
     public static final double EDGE_AVOIDANCE_PERCENT_X = 2.5; // защитная зона по краям поля по X
     public static final double EDGE_AVOIDANCE_PERCENT_Y = 5.0; //  защитная зона по краям поля по Y
+
     public static final double BASE_SIZE = 11; // базовый размер объекта
-    public static final double RADIUS_SMELL_HEAR = BASE_SIZE * 30;
-    public static final double RADIUS_VISION = BASE_SIZE * 18;
+    public static final double BIG_RADIUS_VISION = BASE_SIZE * 60;
+    public static final double SMALL_RADIUS_VISION = BASE_SIZE * 18;
+    public static final int CHANCE_OF_SENSING_DANGER = 20;
     public static final double RADIUS_INTERACTION = BASE_SIZE; // радиус взаимодействия обьектов
-    public static final double SHARE_FOOD_DISTANCE = 3 * BASE_SIZE; // радиус на котором обьект может поделиться добычей
+    public static final double SHARE_FOOD_DISTANCE = 4 * BASE_SIZE; // радиус на котором обьект может поделиться добычей
+    public static final int MAX_NUMBER_FOODSHARER = 2; // максимальное количество особей, с которыми можно поделиться едой
+
     public static final double SPEED = 9;
+    public static final double CARNIVORA_SPEED_MOD_BASE = 1.3;
+    public static final double  CARNIVORA_VISION_MOD_BASE = 1.4;
+    public static final double HERBIVORY_SPEED_MOD_BASE = 1;
+    public static final double  HERBIVORY_VISION_MOD_BASE = 1;
+
     public static final int CORPSE_TIME = 3; // время существования трупа (циклов/секунд)
     public static final int PLANT_REBIRTH_TIME = 15; // время до возрождения растений
+
     public static final int ENERGY_FOR_WALKING = -1;
     public static final int ENERGY_FOR_HUNTING = -2;
     public static final int ENERGY_FOR_FLEEING = -2;
@@ -41,7 +51,6 @@ public class Engines {
         Summer,
         Autumn,
         Winter
-
     }
 
     public enum ObjectGender {

@@ -92,6 +92,7 @@ public class PlantTree extends APlant {
                 gc.lineTo(centerX - length, centerY + length);
                 gc.lineTo(centerX + length, centerY + length);
                 gc.closePath();
+                // контур:
                 gc.stroke();
                 gc.setFill(getColor());
                 gc.beginPath();
