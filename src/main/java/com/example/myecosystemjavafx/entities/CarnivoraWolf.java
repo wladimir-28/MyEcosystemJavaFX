@@ -26,6 +26,7 @@ public class CarnivoraWolf extends ACarnivora {
     protected final double height = BASE_SIZE * 1.8;
     protected final double babyWidth = 0.8 * width;
     protected final double babyHeight = 0.8 * height;
+    protected final double imageCorrection = 1.2;
 
     protected double satietyModifier = 1; //модификатор насыщения (для крупных животных - штраф)
     protected int nutritionValue = 40; //сытность, хар-т питательность как жертвы

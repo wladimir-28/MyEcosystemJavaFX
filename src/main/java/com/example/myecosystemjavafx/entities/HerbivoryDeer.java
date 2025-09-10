@@ -22,6 +22,7 @@ public class HerbivoryDeer extends AHerbivory {
     protected final double height = BASE_SIZE * 1.8;
     protected final double babyWidth = 0.8 * width;
     protected final double babyHeight = 0.8 * height;
+    protected final double imageCorrection = 1.3;
 
     protected double satietyModifier = 0.75; //модификатор насыщения (для крупных животных - штраф)
     protected int nutritionValue = 60; //сытность, хар-т питательность как жертвы
@@ -90,27 +91,28 @@ public class HerbivoryDeer extends AHerbivory {
                         femaleImage,
                         getInterX() - babyWidth / 2,
                         getInterY() - babyHeight / 2,
-                        babyWidth,
-                        babyHeight
+                        (int)(imageCorrection * babyWidth),
+                        (int)(imageCorrection * babyHeight)
                 );
             }
-            else if (getGender() == Male && maleImageLoaded == true) {
-                gc.drawImage(
-                        maleImage,
-                        getInterX() - width / 2,
-                        getInterY() - height / 2,
-                        width,
-                        height
-                );
-            } else if (getGender() == Female && femaleImageLoaded == true) {
+            if (getAge() < 1 && femaleImageLoaded == false) {
+                gc.setFill(getColor());
+                gc.fillRect((getInterX() - babyHeight / 2), (getInterY() - babyWidth / 2), babyWidth / 2, babyHeight / 2);
+                // контур:
+                gc.setStroke(getStrokeColor());
+                gc.setLineWidth(1);
+                gc.strokeRect(getInterX() - babyHeight / 2, getInterY() - babyWidth / 2, babyWidth / 2, babyHeight / 2);
+            }
+
+            if (getAge() >= 1 && getGender() == Female && femaleImageLoaded == true) {
                 gc.drawImage(
                         femaleImage,
                         getInterX() - width / 2,
                         getInterY() - height / 2,
-                        width,
-                        height
+                        (int)(imageCorrection * width),
+                        (int)(imageCorrection * height)
                 );
-            } else {
+            }  if (getAge() >= 1 && femaleImageLoaded == false) {
                 gc.setFill(getColor());
                 gc.fillRect((getInterX() - height / 2), (getInterY() - width / 2), width / 2, height /2);
                 // контур:
@@ -118,15 +120,27 @@ public class HerbivoryDeer extends AHerbivory {
                 gc.setLineWidth(1);
                 gc.strokeRect(getInterX() - height / 2, getInterY() - width / 2, width / 2, height / 2);
             }
+            if (getAge() >= 1 && getGender() == Male && maleImageLoaded == true) {
+                gc.drawImage(
+                        maleImage,
+                        getInterX() - width / 2,
+                        getInterY() - height / 2,
+                        (int)(imageCorrection * width),
+                        (int)(imageCorrection * height)
+                );
+            } if (getAge() >= 1 && getGender() == Male && maleImageLoaded == false) {
+                // точка посредине квадрата, который отобразился в женском варианте
+            }
         }
+
         else {
             if (deadImageLoaded == true) {
                 gc.drawImage(
                         deadImage,
                         getInterX() - width / 2,
                         getInterY() - height / 2,
-                        width,
-                        height
+                        (int)(imageCorrection * width),
+                        (int)(imageCorrection * height)
                 );
             } else {
                 gc.setStroke(getStrokeColor());
