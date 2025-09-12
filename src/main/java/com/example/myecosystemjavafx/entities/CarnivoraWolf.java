@@ -11,22 +11,20 @@ import static com.example.myecosystemjavafx.Engines.ObjectMode.*;
 public class CarnivoraWolf extends ACarnivora {
 
     protected static  Image maleImage;
-    protected static boolean maleImageLoaded = false;
+    protected static boolean imageLoaded = false;
     protected static Image femaleImage;
-    protected static boolean femaleImageLoaded = false;
     protected static Image deadImage;
-    protected static boolean deadImageLoaded = false;
 
     protected final int maxSatiety = 75;
 
-    protected int maxNumberOfChildren = 2;
-
-    protected final double radius = BASE_SIZE * 0.5;
-    protected final double width = BASE_SIZE * 1.8;
-    protected final double height = BASE_SIZE * 1.8;
+    //protected final double radius = BASE_SIZE * 0.5;
+    protected final double width = BASE_SIZE;
+    protected final double height = BASE_SIZE;
     protected final double babyWidth = 0.8 * width;
     protected final double babyHeight = 0.8 * height;
-    protected final double imageCorrection = 1.2;
+    protected final double imageCorrection = 1.9 * TEMP_K;
+
+    protected int maxNumberOfChildren = 2;
 
     protected double satietyModifier = 1; //модификатор насыщения (для крупных животных - штраф)
     protected int nutritionValue = 40; //сытность, хар-т питательность как жертвы
@@ -60,87 +58,111 @@ public class CarnivoraWolf extends ACarnivora {
     @Override
     public int getMaxSatiety() {return maxSatiety;}
 
-    @Override
-    protected Color getColor() {return Color.DIMGRAY;}
-
 
     public static void loadImages(String maleImagePath, String femaleImagePath, String deadImagePath) {
         try {
             maleImage = new Image(CarnivoraWolf.class.getResourceAsStream(maleImagePath));
-            maleImageLoaded = true;
-
-        } catch (Exception e) {
-            System.err.println("Не удалось загрузить изображение самца волка: " + e.getMessage());
-        }
-        try {
             femaleImage = new Image(CarnivoraWolf.class.getResourceAsStream(femaleImagePath));
-            femaleImageLoaded = true;
+            deadImage = new Image(CarnivoraWolf.class.getResourceAsStream(deadImagePath));
+            imageLoaded = true;
 
         } catch (Exception e) {
-            System.err.println("Не удалось загрузить изображение самки волка: " + e.getMessage());
-        }
-        try {
-            deadImage = new Image(CarnivoraWolf.class.getResourceAsStream(deadImagePath));
-            deadImageLoaded = true;
-        } catch (Exception e) {
-            System.err.println("Не удалось загрузить изображения трупа волка: " + e.getMessage());
+            System.err.println("Не удалось загрузить изображения волка: " + e.getMessage());
+            imageLoaded = false;
         }
     }
+
+    // Постоянные цвета в полях класса
+    private final Color OBJECT_COLOR = Color.DIMGRAY;
+
 
     @Override
     public void printObject(GraphicsContext gc, double alpha) {
         interpolatedX(alpha);
         interpolatedY(alpha);
 
-        if (objectMode != Dead) {
-            if (getAge() < 1 && femaleImageLoaded == true) {
-                gc.drawImage(
-                        femaleImage,
-                        getInterX() - babyWidth / 2,
-                        getInterY() - babyHeight / 2,
-                        babyWidth,
-                        babyHeight
-                );
-            }
-            else if (getGender() == Male && maleImageLoaded == true) {
-                gc.drawImage(
-                        maleImage,
-                        getInterX() - width / 2,
-                        getInterY() - height / 2,
-                        width,
-                        height
-                );
-            } else if (getGender() == Female && femaleImageLoaded == true) {
-                gc.drawImage(
-                        femaleImage,
-                        getInterX() - width / 2,
-                        getInterY() - height / 2,
-                        width,
-                        height
-                );
-            } else {
-                gc.setFill(getColor());
-                gc.fillRect((getInterX() - height / 2), (getInterY() - width / 2), width / 2, height /2);
-                //
-                gc.setStroke(getStrokeColor());
-                gc.setLineWidth(1);
-                gc.strokeRect(getInterX() - height / 2, getInterY() - width / 2, width / 2, height / 2);
-            }
+        if (objectMode == Dead) {
+            drawDeadObject(gc);
+            return;
         }
-        else {
-            if (deadImageLoaded == true) {
-                gc.drawImage(
-                        deadImage,
-                        getInterX() - width / 2,
-                        getInterY() - height / 2,
-                        width,
-                        height
-                );
-            } else {
-                gc.setStroke(getStrokeColor());
-                gc.setLineWidth(1);
-                gc.strokeRect(getInterX() - height / 2, getInterY() - width / 2, width / 2, height / 2);
-            }
+
+        if (getAge() < GROWING_UP_AGE) {
+            drawBaby(gc);
+        } else {
+            drawAdult(gc);
         }
+    }
+
+    private void drawDeadObject(GraphicsContext gc) {
+        boolean isBaby = getAge() < GROWING_UP_AGE;
+
+        double currentWidth = isBaby ? babyWidth : width;
+        double currentHeight = isBaby ? babyHeight : height;
+
+        if (imageLoaded) {
+            drawImage(gc, deadImage, currentWidth, currentHeight);
+        } else {
+            drawDeadCircle(gc, currentWidth, currentHeight);
+        }
+    }
+
+    private void drawBaby(GraphicsContext gc) {
+        if (imageLoaded) {
+            drawImage(gc, femaleImage, babyWidth, babyHeight);
+        } else {
+            drawFallbackCircle(gc, babyWidth, babyHeight, false);
+        }
+    }
+
+    private void drawAdult(GraphicsContext gc) {
+        boolean isFemale = getGender() == Female;
+
+        if (imageLoaded) {
+            drawImage(gc, isFemale ? femaleImage : maleImage, width, height);
+        } else {
+            drawFallbackCircle(gc, width, height, !isFemale);
+        }
+    }
+
+    private void drawImage(GraphicsContext gc, Image image, double imgWidth, double imgHeight) {
+        double centerX = getInterX() - imgWidth * HALF;
+        double centerY = getInterY() - imgHeight * HALF;
+        double scaledWidth = imageCorrection * imgWidth;
+        double scaledHeight = imageCorrection * imgHeight;
+
+        gc.drawImage(image, centerX, centerY, scaledWidth, scaledHeight);
+    }
+
+    private void drawFallbackCircle(GraphicsContext gc, double circleWidth, double circleHeight, boolean isMale) {
+        double centerX = getInterX();
+        double centerY = getInterY();
+        double radius = circleWidth * HALF; // Используем ширину как диаметр
+
+        // Залитый круг
+        gc.setFill(OBJECT_COLOR);
+        gc.fillOval(centerX - radius, centerY - radius, radius * 2, radius * 2);
+
+        // Контур
+        gc.setStroke(STROKE_COLOR);
+        gc.setLineWidth(1);
+        gc.strokeOval(centerX - radius, centerY - radius, radius * 2, radius * 2);
+
+        // Точка для самца
+        if (isMale) {
+            double dotRadius = radius * 0.2;
+            gc.setFill(STROKE_COLOR);
+            gc.fillOval(centerX - dotRadius, centerY - dotRadius, dotRadius * 2, dotRadius * 2);
+        }
+    }
+
+    private void drawDeadCircle(GraphicsContext gc, double circleWidth, double circleHeight) {
+        double centerX = getInterX();
+        double centerY = getInterY();
+        double radius = circleWidth * HALF;
+
+        // ТОЛЬКО контур без заливки для мертвых животных
+        gc.setStroke(STROKE_COLOR);
+        gc.setLineWidth(1);
+        gc.strokeOval(centerX - radius, centerY - radius, radius * 2, radius * 2);
     }
 }

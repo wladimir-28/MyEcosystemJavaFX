@@ -45,10 +45,12 @@ public class MyEcosystemController {
     private long lastYearsUpdate = 0;
     private long lastFrameTime = 0;
     private long accumulatedTime = 0;
+    private long lastRenderTime = 0;
     private double alpha = 0.0;
     private final long LIFE_UPDATE_INTERVAL = 1_000_000_000L;
     private final long SEASON_INTERVAL = SECOND_IN_SEASON * 1_000_000_000L;
     private final long YEAR_INTERVAL = SECOND_IN_SEASON * 4_000_000_000L;
+    private static final long TARGET_FRAME_TIME = 22_222_222L;; // 45 FPS
 
     public static SeasonsOfYear getSeasonOfYear() {return seasonOfYear;}
 
@@ -167,12 +169,18 @@ public class MyEcosystemController {
 
                 if (isPaused) return;
 
+                // Ограничение до 30 FPS
+                if (now - lastRenderTime < TARGET_FRAME_TIME) {
+                    return;
+                }
+
                 if (lastFrameTime == 0) {
                     lastFrameTime = now;
                     lastUpdateTime = now;
                     lastLifeUpdate = now;
                     lastSeasonUpdate = now;
                     lastYearsUpdate = now;
+                    lastRenderTime = now;
                     return;
                 }
 
@@ -204,6 +212,7 @@ public class MyEcosystemController {
 
 
                 lastFrameTime = now;
+                lastRenderTime = now;
             }
         };
     }
@@ -406,28 +415,28 @@ public class MyEcosystemController {
     private Button AddHerbivoryButton3X5;
 
     @FXML
-    private Button AddPlantButton2;
+    private Button AddMediumShrubButton;
 
     @FXML
-    private Button AddPlantButton2X10;
+    private Button AddMediumShrubButtonX10;
 
     @FXML
-    private Button AddPlantButton2X25;
+    private Button AddMediumShrubButtonX25;
 
     @FXML
-    private Button AddPlantButton2X5;
+    private Button AddMediumShrubButtonX5;
 
     @FXML
-    private Button AddPlantButton3;
+    private Button AddSmallShrubButton;
 
     @FXML
-    private Button AddPlantButton3X10;
+    private Button AddSmallShrubButtonX10;
 
     @FXML
-    private Button AddPlantButton3X25;
+    private Button AddSmallShrubButtonX25;
 
     @FXML
-    private Button AddPlantButton3X5;
+    private Button AddSmallShrubButtonX5;
 
     @FXML
     private Button AddRabbitButton;
@@ -514,13 +523,37 @@ public class MyEcosystemController {
     void addTree(ActionEvent event) {addTrees(1);}
 
     @FXML
-    void AddTreeX5(ActionEvent event) {addTrees(5);}
+    void addTreeX5(ActionEvent event) {addTrees(5);}
 
     @FXML
-    void AddTreeX10(ActionEvent event) {addTrees(10);}
+    void addTreeX10(ActionEvent event) {addTrees(10);}
 
     @FXML
     void addTreeX25(ActionEvent event) {addTrees(25);}
+
+    @FXML
+    void addMediumShrub(ActionEvent event) {addMediumShrubs(1);}
+
+    @FXML
+    void addMediumShrubX5(ActionEvent event) {addMediumShrubs(5);}
+
+    @FXML
+    void addMediumShrubX10(ActionEvent event) {addMediumShrubs(10);}
+
+    @FXML
+    void addMediumShrubX25(ActionEvent event) {addMediumShrubs(25);}
+
+    @FXML
+    void addSmallShrub(ActionEvent event) {addSmallShrubs(1);}
+
+    @FXML
+    void addSmallShrubX5(ActionEvent event) {addSmallShrubs(5);}
+
+    @FXML
+    void addSmallShrubX10(ActionEvent event) {addSmallShrubs(10);}
+
+    @FXML
+    void addSmallShrubX25(ActionEvent event) {addSmallShrubs(25);}
 
     /// ///////////////////////////////////////////////////////////////////
 
@@ -562,6 +595,18 @@ public class MyEcosystemController {
     void addTrees(int countPlants) {
         for (int i = 0; i < countPlants; i++) {
             objectsList.add(UIObject.getCounterObjects(), new PlantTree());
+        }
+    }
+
+    void addMediumShrubs(int countPlants) {
+        for (int i = 0; i < countPlants; i++) {
+            objectsList.add(UIObject.getCounterObjects(), new PlantMediumShrub());
+        }
+    }
+
+    void addSmallShrubs(int countPlants) {
+        for (int i = 0; i < countPlants; i++) {
+            objectsList.add(UIObject.getCounterObjects(), new PlantSmallShrub());
         }
     }
 }

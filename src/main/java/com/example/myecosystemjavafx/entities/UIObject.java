@@ -24,6 +24,7 @@ public class UIObject {
     protected double longevity = 1;
     protected boolean isPregnant = false;
     protected int maxNumberOfChildren = 1;
+    protected final Color STROKE_COLOR = Color.BLACK;
 
     protected double centerX;
     protected double centerY;
@@ -108,9 +109,9 @@ public class UIObject {
         return new UIObject(this);
     }
 
-    protected Color getColor() {
-        return Color.WHITE;
-    }
+//    protected Color getColor() {
+//        return Color.WHITE;
+//    }
 
     public static int getCounterObjects() {
         return counterObjects;
@@ -150,9 +151,7 @@ public class UIObject {
 
     public double getBigRadiusVision() {return bigRadiusVision;}
 
-    public double getSmallRadiusVision() {
-        return smallRadiusVision;
-    }
+    public double getSmallRadiusVision() {return smallRadiusVision;}
 
     public boolean getPregnant() {return isPregnant;}
 
@@ -415,19 +414,6 @@ public class UIObject {
 //    protected int agilityScore = 20; //ловкость
 
 
-    // среднее растение
-//    protected double satietyModifier = 0; //модификатор насыщения (для крупных животных - штраф)
-//    protected int nutritionValue = 50; //сытность, хар-т питательность как жертвы
-//    protected int strongScore = 0; //сила
-//    protected int agilityScore = 20; //ловкость
-
-
-    // малое растение
-//    protected double satietyModifier = 0; //модификатор насыщения (для крупных животных - штраф)
-//    protected int nutritionValue = 25; //сытность, хар-т питательность как жертвы
-//    protected int strongScore = 0; //сила
-//    protected int agilityScore = 0; //ловкость
-
     public static double calcDefenseModifier(double attackStrong, double defendStrong) {
         if (defendStrong == 0) {return 0.0;}
         double difference = Math.abs(attackStrong - defendStrong);
@@ -463,8 +449,6 @@ public class UIObject {
 
         double criticalFailProbability = Math.min(DefMod, 1.0);
         double failProbability = Math.min(EscMod + DefMod, 1.0);
-        //System.out.println("DefMod: " + DefMod + ", EscMod: " + EscMod);
-        //System.out.println("Critical Fail: " + criticalFailProbability + ", Fail: " + failProbability);
 
         double battleResult = Math.random();
         if (battleResult >= failProbability) {

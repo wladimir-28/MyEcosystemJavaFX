@@ -83,8 +83,8 @@ public class AHerbivory extends UIObject {
     public void selectObjectMode() {
         if (objectMode == Dead || satiety == 0)                             {objectMode = Dead;}
         else if (dangerState == Danger)                                     {objectMode = Fleeing;}
-        else if ((hungryState == VeryHungry && energy != 0) ||
-                (hungryState == Hungry && energyState != VeryLowEnergy))    {objectMode = Hunting;}
+        else if ((hungryState == VeryHungry && energyState != VeryLowEnergy) ||
+                (hungryState == Hungry && energyState != LowEnergy))        {objectMode = Hunting;}
         else if ((objectMode == Rest && energy != MAX_ENERGY) ||
                 energyState == VeryLowEnergy ||
                 (hungryState == Full && energyState != VeryHighEnergy))     {objectMode = Rest;}

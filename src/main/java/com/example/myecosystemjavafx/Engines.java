@@ -5,11 +5,14 @@ import static java.lang.Math.sqrt;
 public class Engines {
     public static final int CANVAS_WIDTH = 1520; // ширина поля
     public static final int CANVAS_HEIGHT = 800; // высота поля
-    public static final int SECOND_IN_SEASON = 5;
+    public static final int SECOND_IN_SEASON = 10;
     public static final double EDGE_AVOIDANCE_PERCENT_X = 2.5; // защитная зона по краям поля по X
     public static final double EDGE_AVOIDANCE_PERCENT_Y = 5.0; //  защитная зона по краям поля по Y
+    public static final double HALF = 0.5;
+    public static final double TEMP_K = 1.3; // для тестового масштабирования изображений
 
-    public static final double BASE_SIZE = 11; // базовый размер объекта
+
+    public static final double BASE_SIZE = 10; // базовый размер объекта
     public static final double BIG_RADIUS_VISION = BASE_SIZE * 60;
     public static final double SMALL_RADIUS_VISION = BASE_SIZE * 18;
     public static final int CHANCE_OF_SENSING_DANGER = 20;
@@ -23,6 +26,8 @@ public class Engines {
     public static final double HERBIVORY_SPEED_MOD_BASE = 1;
     public static final double  HERBIVORY_VISION_MOD_BASE = 1;
 
+    public static final int GROWING_UP_AGE = 1;
+    public static final int PLANT_GROWING_UP_AGE = 5;
     public static final int CORPSE_TIME = 3; // время существования трупа (циклов/секунд)
     public static final int PLANT_REBIRTH_TIME = 15; // время до возрождения растений
 

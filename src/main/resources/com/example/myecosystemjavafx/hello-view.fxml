@@ -11,49 +11,49 @@
       <Pane layoutX="540.0" layoutY="24.0" prefHeight="105.0" prefWidth="240.0" style="-fx-border-color: black;">
          <children>
             <Button fx:id="AddWolfButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#addWolf" prefHeight="25.0" prefWidth="100.0" text="+Волк" />
+            <Button fx:id="AddWolfButtonX5" layoutX="113.0" layoutY="10.0" mnemonicParsing="false" onAction="#AddWolfX5" prefHeight="25.0" prefWidth="36.0" text="x5" />
+            <Button fx:id="AddWolfButtonX10" layoutX="153.0" layoutY="10.0" mnemonicParsing="false" onAction="#AddWolfX10" prefHeight="25.0" prefWidth="36.0" text="x10" />
+            <Button fx:id="AddWolfButtonX25" layoutX="193.0" layoutY="10.0" mnemonicParsing="false" onAction="#AddWolfX25" prefHeight="25.0" prefWidth="36.0" text="x25" />
             <Button fx:id="AddCarnivoraButton2" layoutX="10.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" />
+            <Button fx:id="AddCarnivoraButton2X5" layoutX="113.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x5" />
+            <Button fx:id="AddCarnivoraButton2X25" layoutX="193.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x25" />
+            <Button fx:id="AddCarnivoraButton2X10" layoutX="153.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x10" />
             <Button fx:id="AddCarnivoraButton3" layoutX="10.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" />
             <Button fx:id="AddCarnivoraButton3X5" layoutX="113.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x5" />
             <Button fx:id="AddCarnivoraButton3X10" layoutX="153.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x10" />
             <Button fx:id="AddCarnivoraButton3X25" layoutX="193.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x25" />
-            <Button fx:id="AddCarnivoraButton2X5" layoutX="113.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x5" />
-            <Button fx:id="AddCarnivoraButton2X10" layoutX="153.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x10" />
-            <Button fx:id="AddCarnivoraButton2X25" layoutX="193.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x25" />
-            <Button fx:id="AddWolfButtonX5" layoutX="113.0" layoutY="10.0" mnemonicParsing="false" onAction="#AddWolfX5" prefHeight="25.0" prefWidth="36.0" text="x5" />
-            <Button fx:id="AddWolfButtonX10" layoutX="153.0" layoutY="10.0" mnemonicParsing="false" onAction="#AddWolfX10" prefHeight="25.0" prefWidth="36.0" text="x10" />
-            <Button fx:id="AddWolfButtonX25" layoutX="193.0" layoutY="10.0" mnemonicParsing="false" onAction="#AddWolfX25" prefHeight="25.0" prefWidth="36.0" text="x25" />
          </children>
       </Pane>
       <Pane layoutX="290.0" layoutY="24.0" prefHeight="105.0" prefWidth="240.0" style="-fx-border-color: black;">
          <children>
-            <Button fx:id="AddRabbitButton" layoutX="10.0" layoutY="40.0" mnemonicParsing="false" onAction="#addRabbit" prefHeight="25.0" prefWidth="100.0" text="+ Кролик" />
-            <Button fx:id="AddHerbivoryButton3" layoutX="10.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" />
-            <Button fx:id="AddHerbivoryButton3X5" layoutX="113.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x5" />
-            <Button fx:id="AddHerbivoryButton3X10" layoutX="153.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x10" />
-            <Button fx:id="AddHerbivoryButton3X25" layoutX="193.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x25" />
-            <Button fx:id="AddRabbitButtonX5" layoutX="113.0" layoutY="40.0" mnemonicParsing="false" onAction="#addRabbitX5" prefHeight="25.0" prefWidth="36.0" text="x5" />
-            <Button fx:id="AddRabbitButtonX10" layoutX="153.0" layoutY="40.0" mnemonicParsing="false" onAction="#addRabbitX10" prefHeight="25.0" prefWidth="36.0" text="x10" />
-            <Button fx:id="AddRabbitButtonX25" layoutX="193.0" layoutY="40.0" mnemonicParsing="false" onAction="#addRabbitX25" prefHeight="25.0" prefWidth="36.0" text="x25" />
+            <Button fx:id="AddDeerButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#addDeer" prefHeight="25.0" prefWidth="100.0" text="+Олень" />
             <Button fx:id="AddDeerButtonX5" layoutX="113.0" layoutY="10.0" mnemonicParsing="false" onAction="#addDeerX5" prefHeight="25.0" prefWidth="36.0" text="x5" />
             <Button fx:id="AddDeerButtonX10" layoutX="153.0" layoutY="10.0" mnemonicParsing="false" onAction="#addDeerX10" prefHeight="25.0" prefWidth="36.0" text="x10" />
             <Button fx:id="AddDeerButtonX25" layoutX="193.0" layoutY="10.0" mnemonicParsing="false" onAction="#addDeerX25" prefHeight="25.0" prefWidth="36.0" text="x25" />
-            <Button fx:id="AddDeerButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#addDeer" prefHeight="25.0" prefWidth="100.0" text="+Олень" />
+            <Button fx:id="AddRabbitButton" layoutX="10.0" layoutY="40.0" mnemonicParsing="false" onAction="#addRabbit" prefHeight="25.0" prefWidth="100.0" text="+ Кролик" />
+            <Button fx:id="AddRabbitButtonX5" layoutX="113.0" layoutY="40.0" mnemonicParsing="false" onAction="#addRabbitX5" prefHeight="25.0" prefWidth="36.0" text="x5" />
+            <Button fx:id="AddRabbitButtonX10" layoutX="153.0" layoutY="40.0" mnemonicParsing="false" onAction="#addRabbitX10" prefHeight="25.0" prefWidth="36.0" text="x10" />
+            <Button fx:id="AddHerbivoryButton3X25" layoutX="193.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x25" />
+            <Button fx:id="AddHerbivoryButton3" layoutX="10.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" />
+            <Button fx:id="AddHerbivoryButton3X5" layoutX="113.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x5" />
+            <Button fx:id="AddHerbivoryButton3X10" layoutX="153.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x10" />
+            <Button fx:id="AddRabbitButtonX25" layoutX="193.0" layoutY="40.0" mnemonicParsing="false" onAction="#addRabbitX25" prefHeight="25.0" prefWidth="36.0" text="x25" />
          </children>
       </Pane>
       <Pane layoutX="40.0" layoutY="24.0" prefHeight="105.0" prefWidth="240.0" style="-fx-border-color: black;">
          <children>
-            <Button fx:id="AddPlantButton2" layoutX="10.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" />
-            <Button fx:id="AddPlantButton3" layoutX="10.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" />
-            <Button fx:id="AddPlantButton3X5" layoutX="113.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x5" />
-            <Button fx:id="AddPlantButton3X10" layoutX="153.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x10" />
-            <Button fx:id="AddPlantButton3X25" layoutX="193.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x25" />
-            <Button fx:id="AddPlantButton2X5" layoutX="113.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x5" />
-            <Button fx:id="AddPlantButton2X10" layoutX="153.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x10" />
-            <Button fx:id="AddPlantButton2X25" layoutX="193.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="x25" />
-            <Button fx:id="AddTreeButtonX5" layoutX="113.0" layoutY="10.0" mnemonicParsing="false" onAction="#AddTreeX5" prefHeight="25.0" prefWidth="36.0" text="x5" />
-            <Button fx:id="AddTreeButtonX10" layoutX="153.0" layoutY="10.0" mnemonicParsing="false" onAction="#AddTreeX10" prefHeight="25.0" prefWidth="36.0" text="x10" />
-            <Button fx:id="AddTreeButtonX25" layoutX="193.0" layoutY="10.0" mnemonicParsing="false" onAction="#addTreeX25" prefHeight="25.0" prefWidth="36.0" text="x25" />
             <Button fx:id="AddTreeButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#addTree" prefHeight="25.0" prefWidth="100.0" text="+Дерево" />
+            <Button fx:id="AddTreeButtonX5" layoutX="113.0" layoutY="10.0" mnemonicParsing="false" onAction="#addTreeX5" prefHeight="25.0" prefWidth="36.0" text="x5" />
+            <Button fx:id="AddTreeButtonX10" layoutX="153.0" layoutY="10.0" mnemonicParsing="false" onAction="#addTreeX10" prefHeight="25.0" prefWidth="36.0" text="x10" />
+            <Button fx:id="AddTreeButtonX25" layoutX="193.0" layoutY="10.0" mnemonicParsing="false" onAction="#addTreeX25" prefHeight="25.0" prefWidth="36.0" text="x25" />
+            <Button fx:id="AddMediumShrubButton" layoutX="10.0" layoutY="40.0" mnemonicParsing="false" onAction="#addMediumShrub" prefHeight="25.0" prefWidth="100.0" text="+Куст" />
+            <Button fx:id="AddMediumShrubButtonX5" layoutX="113.0" layoutY="40.0" mnemonicParsing="false" onAction="#addMediumShrubX5" prefHeight="25.0" prefWidth="36.0" text="x5" />
+            <Button fx:id="AddMediumShrubButtonX10" layoutX="153.0" layoutY="40.0" mnemonicParsing="false" onAction="#addMediumShrubX10" prefHeight="25.0" prefWidth="36.0" text="x10" />
+            <Button fx:id="AddMediumShrubButtonX25" layoutX="193.0" layoutY="40.0" mnemonicParsing="false" onAction="#addMediumShrubX25" prefHeight="25.0" prefWidth="36.0" text="x25" />
+            <Button fx:id="AddSmallShrubButton" layoutX="10.0" layoutY="70.0" mnemonicParsing="false" onAction="#addSmallShrub" prefHeight="25.0" prefWidth="100.0" text="+Кустик" />
+            <Button fx:id="AddSmallShrubButtonX5" layoutX="113.0" layoutY="70.0" mnemonicParsing="false" onAction="#addSmallShrubX5" prefHeight="25.0" prefWidth="36.0" text="x5" />
+            <Button fx:id="AddSmallShrubButtonX10" layoutX="153.0" layoutY="70.0" mnemonicParsing="false" onAction="#addSmallShrubX10" prefHeight="25.0" prefWidth="36.0" text="x10" />
+            <Button fx:id="AddSmallShrubButtonX25" layoutX="193.0" layoutY="70.0" mnemonicParsing="false" onAction="#addSmallShrubX25" prefHeight="25.0" prefWidth="36.0" text="x25" />
          </children>
       </Pane>
       <Pane layoutX="790.0" layoutY="24.0" prefHeight="105.0" prefWidth="240.0" style="-fx-border-color: black;">

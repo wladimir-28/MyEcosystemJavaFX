@@ -26,9 +26,7 @@ public class APlant extends UIObject {
 
     @Override
     public void selectObjectMode() {
-        if (objectMode != Dead) {
-            objectMode = Rest;
-        }
+        if (objectMode != Dead) {objectMode = Rest;}
     }
 
     @Override
@@ -46,13 +44,5 @@ public class APlant extends UIObject {
     @Override
     public void restAction() { }
 
-    @Override
-    public void deadAction() {
-        if (corpseTime == 0) {
-            objectMode = Rest;
-            corpseTime = PLANT_REBIRTH_TIME;
-        } else {
-            corpseTime -= 1;
-        }
-    }
+
 }

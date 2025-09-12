@@ -6,12 +6,11 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import static com.example.myecosystemjavafx.Engines.*;
-import static com.example.myecosystemjavafx.Engines.HALF;
-//import static com.example.myecosystemjavafx.Engines.ObjectGender.*;
-import static com.example.myecosystemjavafx.Engines.ObjectMode.*;
-import static com.example.myecosystemjavafx.Engines.SeasonsOfYear.*;
+import static com.example.myecosystemjavafx.Engines.ObjectMode.Dead;
+import static com.example.myecosystemjavafx.Engines.SeasonsOfYear.Autumn;
+import static com.example.myecosystemjavafx.Engines.SeasonsOfYear.Winter;
 
-public class PlantTree extends APlant {
+public class PlantSmallShrub extends APlant {
 
     protected static  Image summerImage;
     protected static boolean imageLoaded = false;
@@ -21,22 +20,22 @@ public class PlantTree extends APlant {
     private final Color AUTUMN_OBJECT_COLOR = Color.ORANGE;
 
 
-    protected final double width = BASE_SIZE;
-    protected final double height = BASE_SIZE;
-    protected final double length = BASE_SIZE * 0.7;
+    protected final double width = BASE_SIZE * 0.3;
+    protected final double height = BASE_SIZE * 0.3;
+    protected final double length = BASE_SIZE * 0.7 * 0.3;
     protected final double babyWidth = 0.8 * width;
     protected final double babyHeight = 0.8 * height;
     protected final double babyLength = 0.8 * length;
-    protected final double imageCorrection = 2.4 * TEMP_K;
+    protected final double imageCorrection = 5 * TEMP_K;
 
     protected double satietyModifier = 0; //модификатор насыщения (для крупных животных - штраф)
-    protected int nutritionValue = 100; //сытность, хар-т питательность как жертвы
+    protected int nutritionValue = 25; //сытность, хар-т питательность как жертвы
     protected int strongScore = 0; //сила
-    protected int agilityScore = 20; //ловкость
+    protected int agilityScore = 5; //ловкость
 
-    public PlantTree(){super();}
+    public PlantSmallShrub(){super();}
 
-    public PlantTree(PlantTree original) {super(original);}
+    public PlantSmallShrub(PlantSmallShrub original) {super(original);}
 
     @Override
     public double getSatietyModifier() {return satietyModifier;}
@@ -51,36 +50,23 @@ public class PlantTree extends APlant {
     public int getAgilityScore() {return agilityScore;}
 
     @Override
-    public boolean getPregnant() {
-        if (age != 0 && age % 5 == 0) {
-            return true;
-        } else {return false;}
-    }
+    public boolean getPregnant() {return true;}
 
     @Override
-    public PlantTree copy() {
-        return new PlantTree(this);
+    public PlantSmallShrub copy() {
+        return new PlantSmallShrub(this);
     }
 
-    @Override
-    public void deadAction() {
-        if (corpseTime == 0) {
-            objectMode = Rest;
-            corpseTime = PLANT_REBIRTH_TIME;
-        } else {
-            corpseTime -= 1;
-        }
-    }
 
     public static void loadImages(String summerImagePath, String autumnImagePath, String deadImagePath) {
         try {
-            summerImage = new Image(PlantTree.class.getResourceAsStream(summerImagePath));
-            autumnImage = new Image(PlantTree.class.getResourceAsStream(autumnImagePath));
-            deadImage = new Image(PlantTree.class.getResourceAsStream(deadImagePath));
+            summerImage = new Image(PlantSmallShrub.class.getResourceAsStream(summerImagePath));
+            autumnImage = new Image(PlantSmallShrub.class.getResourceAsStream(autumnImagePath));
+            deadImage = new Image(PlantSmallShrub.class.getResourceAsStream(deadImagePath));
             imageLoaded = true;
 
         } catch (Exception e) {
-            System.err.println("Не удалось загрузить изображения дерева: " + e.getMessage());
+            System.err.println("Не удалось загрузить изображения кустика: " + e.getMessage());
             imageLoaded = false;
         }
     }
@@ -91,12 +77,7 @@ public class PlantTree extends APlant {
             drawDeadObject(gc);
             return;
         }
-
-        if (getAge() < PLANT_GROWING_UP_AGE) {
-            drawBaby(gc);
-        } else {
             drawAdult(gc);
-        }
     }
 
     private void drawDeadObject(GraphicsContext gc) {
@@ -111,16 +92,6 @@ public class PlantTree extends APlant {
             drawImage(gc, deadImage, currentWidth, currentHeight);
         } else {
             drawDeadTriangle(gc, currentWidth, currentHeight, currentLength);
-        }
-    }
-
-    private void drawBaby(GraphicsContext gc) {
-        boolean isAutumn = MyEcosystemController.getSeasonOfYear() == Autumn;
-
-        if (imageLoaded) {
-            drawImage(gc, isAutumn ? autumnImage : summerImage, babyWidth, babyHeight);
-        } else {
-            drawFallbackTriangle(gc, babyWidth, babyHeight, babyLength, isAutumn);
         }
     }
 
@@ -155,6 +126,7 @@ public class PlantTree extends APlant {
             gc.setFill(OBJECT_COLOR);
         }
 
+
         gc.beginPath();
         gc.moveTo(centerX, centerY - length);
         gc.lineTo(centerX - length, centerY + length);
@@ -178,7 +150,6 @@ public class PlantTree extends APlant {
         double centerY = getCenterY();
         double length = rectLength;
 
-        // ТОЛЬКО контур без заливки для мертвых животных
         gc.setStroke(STROKE_COLOR);
         gc.setLineWidth(1);
         gc.beginPath();
@@ -188,4 +159,18 @@ public class PlantTree extends APlant {
         gc.closePath();
         gc.stroke();
     }
+
+    @Override
+    public boolean isCorpseDelete() {
+        if (objectMode == Dead) {
+            if (corpseTime == 0) {
+                return true;
+            } else {
+                corpseTime -= 1;
+                return false;
+            }
+        } else {return false;}
+    }
 }
+
+
