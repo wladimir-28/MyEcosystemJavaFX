@@ -4,9 +4,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-import static com.example.myecosystemjavafx.Engines.*;
-import static com.example.myecosystemjavafx.Engines.ObjectGender.*;
-import static com.example.myecosystemjavafx.Engines.ObjectMode.*;
+import static com.example.myecosystemjavafx.Constants.*;
+import static com.example.myecosystemjavafx.Constants.ObjectGender.*;
+import static com.example.myecosystemjavafx.Constants.ObjectMode.*;
 
 public class CarnivoraWolf extends ACarnivora {
 
@@ -15,9 +15,10 @@ public class CarnivoraWolf extends ACarnivora {
     protected static Image femaleImage;
     protected static Image deadImage;
 
-    protected final int maxSatiety = 75;
+    protected double longevity = 1;
 
-    //protected final double radius = BASE_SIZE * 0.5;
+    protected final int maxSatiety = 70;
+
     protected final double width = BASE_SIZE;
     protected final double height = BASE_SIZE;
     protected final double babyWidth = 0.8 * width;
@@ -57,6 +58,9 @@ public class CarnivoraWolf extends ACarnivora {
 
     @Override
     public int getMaxSatiety() {return maxSatiety;}
+
+    @Override
+    public double getLongevity() {return longevity;}
 
 
     public static void loadImages(String maleImagePath, String femaleImagePath, String deadImagePath) {

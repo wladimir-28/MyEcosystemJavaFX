@@ -5,11 +5,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-import static com.example.myecosystemjavafx.Engines.*;
-import static com.example.myecosystemjavafx.Engines.ObjectMode.Dead;
-import static com.example.myecosystemjavafx.Engines.ObjectMode.Rest;
-import static com.example.myecosystemjavafx.Engines.SeasonsOfYear.Autumn;
-import static com.example.myecosystemjavafx.Engines.SeasonsOfYear.Winter;
+import static com.example.myecosystemjavafx.Constants.*;
+import static com.example.myecosystemjavafx.Constants.ObjectMode.Dead;
+import static com.example.myecosystemjavafx.Constants.ObjectMode.Rest;
+import static com.example.myecosystemjavafx.Constants.SeasonsOfYear.Autumn;
+import static com.example.myecosystemjavafx.Constants.SeasonsOfYear.Winter;
 
 public class PlantMediumShrub extends APlant {
 
@@ -20,6 +20,7 @@ public class PlantMediumShrub extends APlant {
     private final Color OBJECT_COLOR = Color.SEAGREEN;
     private final Color AUTUMN_OBJECT_COLOR = Color.ORANGE;
 
+    protected double longevity = 1;
 
     protected final double width = BASE_SIZE * 0.5;
     protected final double height = BASE_SIZE * 0.5;
@@ -52,10 +53,13 @@ public class PlantMediumShrub extends APlant {
 
     @Override
     public boolean getPregnant() {
-        if (age != 0 && age % 5 == 0) {
+        if (age != 0 && age % 3 == 0 && Math.random() < 0.33) {
             return true;
         } else {return false;}
     }
+
+    @Override
+    public double getLongevity() {return longevity;}
 
     @Override
     public PlantMediumShrub copy() {
@@ -67,9 +71,18 @@ public class PlantMediumShrub extends APlant {
         if (corpseTime == 0) {
             objectMode = Rest;
             corpseTime = PLANT_REBIRTH_TIME;
-        } else {
-            corpseTime -= 1;
-        }
+        } else {corpseTime -= 1;}
+    }
+
+    @Override
+    public boolean isCorpseDelete() {
+        if (objectMode == Dead && age > 3) {
+            if (corpseTime == 1 && Math.random() < 0.5) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {return false;}
     }
 
     public static void loadImages(String summerImagePath, String autumnImagePath, String deadImagePath) {
@@ -173,4 +186,6 @@ public class PlantMediumShrub extends APlant {
         gc.closePath();
         gc.stroke();
     }
+
+
 }

@@ -2,12 +2,12 @@ package com.example.myecosystemjavafx.entities;
 
 import com.example.myecosystemjavafx.MyEcosystemController;
 
-import static com.example.myecosystemjavafx.Engines.*;
-import static com.example.myecosystemjavafx.Engines.DangerState.*;
-import static com.example.myecosystemjavafx.Engines.EmotionsType.*;
-import static com.example.myecosystemjavafx.Engines.EnergyState.*;
-import static com.example.myecosystemjavafx.Engines.HungryState.*;
-import static com.example.myecosystemjavafx.Engines.ObjectMode.*;
+import static com.example.myecosystemjavafx.Constants.*;
+import static com.example.myecosystemjavafx.Constants.DangerState.*;
+import static com.example.myecosystemjavafx.Constants.EmotionsType.*;
+import static com.example.myecosystemjavafx.Constants.EnergyState.*;
+import static com.example.myecosystemjavafx.Constants.HungryState.*;
+import static com.example.myecosystemjavafx.Constants.ObjectMode.*;
 
 public class ACarnivora extends UIObject {
 
@@ -84,7 +84,7 @@ public class ACarnivora extends UIObject {
     @Override
     public void selectObjectMode() {
         if (objectMode == Dead || satiety == 0)                             {objectMode = Dead;}
-        else if (dangerState == Danger)                                     {objectMode = Fleeing;}
+        else if (dangerState == Danger && hungryState != VeryHungry)                                      {objectMode = Fleeing;}
         else if ((hungryState == VeryHungry && energyState != VeryLowEnergy) ||
                 (hungryState == Hungry && energyState != LowEnergy))        {objectMode = Hunting;}
         else if ((objectMode == Rest && energy != MAX_ENERGY) ||

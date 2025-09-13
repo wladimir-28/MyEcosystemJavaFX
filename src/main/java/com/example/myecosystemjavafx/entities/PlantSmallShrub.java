@@ -5,10 +5,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-import static com.example.myecosystemjavafx.Engines.*;
-import static com.example.myecosystemjavafx.Engines.ObjectMode.Dead;
-import static com.example.myecosystemjavafx.Engines.SeasonsOfYear.Autumn;
-import static com.example.myecosystemjavafx.Engines.SeasonsOfYear.Winter;
+import static com.example.myecosystemjavafx.Constants.*;
+import static com.example.myecosystemjavafx.Constants.ObjectMode.Dead;
+import static com.example.myecosystemjavafx.Constants.SeasonsOfYear.Autumn;
+import static com.example.myecosystemjavafx.Constants.SeasonsOfYear.Winter;
 
 public class PlantSmallShrub extends APlant {
 
@@ -19,6 +19,7 @@ public class PlantSmallShrub extends APlant {
     private final Color OBJECT_COLOR = Color.SEAGREEN;
     private final Color AUTUMN_OBJECT_COLOR = Color.ORANGE;
 
+    protected double longevity = 0.5;
 
     protected final double width = BASE_SIZE * 0.3;
     protected final double height = BASE_SIZE * 0.3;
@@ -32,6 +33,8 @@ public class PlantSmallShrub extends APlant {
     protected int nutritionValue = 25; //сытность, хар-т питательность как жертвы
     protected int strongScore = 0; //сила
     protected int agilityScore = 5; //ловкость
+
+    protected int maxNumberOfChildren = 2;
 
     public PlantSmallShrub(){super();}
 
@@ -50,7 +53,17 @@ public class PlantSmallShrub extends APlant {
     public int getAgilityScore() {return agilityScore;}
 
     @Override
-    public boolean getPregnant() {return true;}
+    protected int getMaxNumberOfChildren() {return maxNumberOfChildren;}
+
+    @Override
+    public boolean getPregnant() {
+        if (age != 0  && Math.random() < 0.5) {
+            return true;
+        } else {return false;}
+    }
+
+    @Override
+    public double getLongevity() {return longevity;}
 
     @Override
     public PlantSmallShrub copy() {

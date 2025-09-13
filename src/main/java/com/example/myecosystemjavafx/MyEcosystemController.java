@@ -16,10 +16,11 @@ import com.example.myecosystemjavafx.entities.*;
 import javafx.scene.paint.Color;
 
 import static com.example.myecosystemjavafx.Emotions.loadEmotionImages;
-import static com.example.myecosystemjavafx.Engines.*;
-import static com.example.myecosystemjavafx.Engines.DangerState.*;
-import static com.example.myecosystemjavafx.Engines.ObjectMode.*;
-import static com.example.myecosystemjavafx.Engines.SeasonsOfYear.*;
+import static com.example.myecosystemjavafx.Constants.*;
+import static com.example.myecosystemjavafx.Constants.DangerState.*;
+import static com.example.myecosystemjavafx.Constants.EmotionsType.*;
+import static com.example.myecosystemjavafx.Constants.ObjectMode.*;
+import static com.example.myecosystemjavafx.Constants.SeasonsOfYear.*;
 
 public class MyEcosystemController {
 
@@ -103,14 +104,12 @@ public class MyEcosystemController {
     }
 
     protected void nextYear() {
-        for (UIObject object : objectsList) {
-        object.addAge(1);
-        }
+        for (UIObject object : objectsList) {object.addAge(1);}
     }
 
     protected void oldDeadSimulation() {
         for (UIObject object : objectsList) {
-            if (object.getAge() < 5) {
+            if (object.getAge() < (int)(5 * object.getLongevity())) {
                 continue;
             }
             double random = Math.random();
@@ -118,14 +117,19 @@ public class MyEcosystemController {
 
             if (random < deathProbability) {
                 object.setObjectMode(Dead);
-                System.out.println("Умер от старости");
+                object.setEmotion(OldDeadEmotion);
+                //System.out.println("Умер от старости");
             }
         }
     }
 
     private double getDeathProbability(int age, double longevity) {
         switch (age) {
-            case 5: return 0.015 * (1/longevity);
+            case 1: return 0.015 * (1/longevity);
+            case 2: return 0.015 * (1/longevity);
+            case 3: return 0.015 * (1/longevity);
+            case 4: return 0.015 * (1/longevity);
+            case 5: return 0.02 * (1/longevity);
             case 6: return 0.03 * (1/longevity);
             case 7: return 0.05 * (1/longevity);
             case 8: return 0.08 * (1/longevity);
@@ -152,7 +156,7 @@ public class MyEcosystemController {
 
     private void redrawCanvas() {
         if (backgroundImageLoaded == true) {
-            gc.clearRect(0, 0, CANVAS_WIDTH, Engines.CANVAS_HEIGHT);
+            gc.clearRect(0, 0, CANVAS_WIDTH, Constants.CANVAS_HEIGHT);
             gc.drawImage(currentBackgroundImage, 0, 0, canvas.getWidth(), canvas.getHeight());
         } else {
             gc.setFill(currentReserveColor);
@@ -169,7 +173,7 @@ public class MyEcosystemController {
 
                 if (isPaused) return;
 
-                // Ограничение до 30 FPS
+                // Ограничение FPS
                 if (now - lastRenderTime < TARGET_FRAME_TIME) {
                     return;
                 }
@@ -209,7 +213,6 @@ public class MyEcosystemController {
                     reproductionSimulation();
                     lastYearsUpdate = now;
                 }
-
 
                 lastFrameTime = now;
                 lastRenderTime = now;
@@ -289,7 +292,7 @@ public class MyEcosystemController {
         double minPartnerDistance = BIG_RADIUS_VISION;
         for (UIObject other : objectsList) {
             if (other != thisObject && other.getObjectMode() != Dead && thisObject.isInRadius(other, thisObject.getBigRadiusVision())) {
-                double distance = Engines.calculateDistance(thisObject.getCenterX(), thisObject.getCenterY(), other.getCenterX(), other.getCenterY());
+                double distance = Constants.calculateDistance(thisObject.getCenterX(), thisObject.getCenterY(), other.getCenterX(), other.getCenterY());
 
                 if (thisObject.isTarget(other) && distance < minTargetDistance) {
                     minTargetDistance = distance;

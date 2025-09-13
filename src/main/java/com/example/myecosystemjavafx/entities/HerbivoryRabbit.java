@@ -4,10 +4,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-import static com.example.myecosystemjavafx.Engines.*;
-import static com.example.myecosystemjavafx.Engines.HALF;
-import static com.example.myecosystemjavafx.Engines.ObjectGender.*;
-import static com.example.myecosystemjavafx.Engines.ObjectMode.Dead;
+import static com.example.myecosystemjavafx.Constants.*;
+import static com.example.myecosystemjavafx.Constants.HALF;
+import static com.example.myecosystemjavafx.Constants.ObjectGender.*;
+import static com.example.myecosystemjavafx.Constants.ObjectMode.Dead;
 
 
 public class HerbivoryRabbit extends AHerbivory {
@@ -17,7 +17,7 @@ public class HerbivoryRabbit extends AHerbivory {
     protected static Image femaleImage;
     protected static Image deadImage;
 
-    protected double longevity = 1.5;
+    protected double longevity = 0.5;
 
     protected final double width = BASE_SIZE * 0.7; //
     protected final double height = BASE_SIZE * 0.7; //
@@ -30,7 +30,7 @@ public class HerbivoryRabbit extends AHerbivory {
     protected double satietyModifier = 1.5; //модификатор насыщения (для крупных животных - штраф)
     protected int nutritionValue = 25; //сытность, хар-т питательность как жертвы
     protected int strongScore = 5; //сила
-    protected int agilityScore = 35; //ловкость
+    protected int agilityScore = 40; //ловкость
 
 
     public HerbivoryRabbit(){super();}

@@ -1,18 +1,18 @@
 package com.example.myecosystemjavafx.entities;
 
-import com.example.myecosystemjavafx.Engines;
+import com.example.myecosystemjavafx.Constants;
 import com.example.myecosystemjavafx.MyEcosystemController;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import java.util.Random;
 
-import static com.example.myecosystemjavafx.Engines.EmotionsType.*;
-import static com.example.myecosystemjavafx.Engines.*;
-import static com.example.myecosystemjavafx.Engines.EnergyState.*;
-import static com.example.myecosystemjavafx.Engines.HungryState.*;
-import static com.example.myecosystemjavafx.Engines.ObjectGender.*;
-import static com.example.myecosystemjavafx.Engines.ObjectMode.*;
+import static com.example.myecosystemjavafx.Constants.EmotionsType.*;
+import static com.example.myecosystemjavafx.Constants.*;
+import static com.example.myecosystemjavafx.Constants.EnergyState.*;
+import static com.example.myecosystemjavafx.Constants.HungryState.*;
+import static com.example.myecosystemjavafx.Constants.ObjectGender.*;
+import static com.example.myecosystemjavafx.Constants.ObjectMode.*;
 import static java.lang.Math.sqrt;
 
 public class UIObject {
@@ -50,7 +50,7 @@ public class UIObject {
     protected double partnerDistance = 2 * BIG_RADIUS_VISION;
 
     protected int maxSatiety = 60;
-    protected int satiety = 40;// пока что хардкод
+    protected int satiety = 50;// пока что хардкод
     protected final int MAX_ENERGY = 30;
     protected int energy = 30;// пока что хардкод
 
@@ -70,17 +70,17 @@ public class UIObject {
 
     protected int corpseTime;
 
-    protected Engines.HungryState hungryState;
-    protected Engines.EnergyState energyState;
-    protected Engines.DangerState dangerState;
-    protected Engines.ObjectMode objectMode;
+    protected Constants.HungryState hungryState;
+    protected Constants.EnergyState energyState;
+    protected Constants.DangerState dangerState;
+    protected Constants.ObjectMode objectMode;
     protected EmotionsType emotion = None;
 
 
     public UIObject() {
         id = counterId++;
         counterObjects++;
-        objectGender = Engines.getRandomGender();
+        objectGender = Constants.getRandomGender();
         age = 0;
         //System.out.println("new counterObjects = " + counterObjects);
 
@@ -95,12 +95,12 @@ public class UIObject {
     public UIObject(UIObject original) {
         id = counterId++;
         counterObjects++;
-        objectGender = Engines.getRandomGender();
+        objectGender = Constants.getRandomGender();
         age = 0;
         //System.out.println("copy counterObjects = " + counterObjects);
 
-        this.centerX = original.centerX + Engines.randomValueNearby();
-        this.centerY = original.centerY + Engines.randomValueNearby();
+        this.centerX = original.centerX + Constants.randomValueNearby();
+        this.centerY = original.centerY + Constants.randomValueNearby();
         previousX = centerX;
         previousY = centerY;
     }
@@ -108,10 +108,6 @@ public class UIObject {
     public UIObject copy() {
         return new UIObject(this);
     }
-
-//    protected Color getColor() {
-//        return Color.WHITE;
-//    }
 
     public static int getCounterObjects() {
         return counterObjects;
@@ -190,15 +186,15 @@ public class UIObject {
         dangerY = y;
     }
 
-    public Engines.ObjectMode getObjectMode() {return objectMode;}
+    public Constants.ObjectMode getObjectMode() {return objectMode;}
 
-    public Engines.EmotionsType getEmotion() {return emotion;}
+    public Constants.EmotionsType getEmotion() {return emotion;}
 
     public void setEmotion(EmotionsType newEmotion) {emotion = newEmotion;}
 
-    public void setObjectMode(Engines.ObjectMode newMode) {objectMode = newMode;}
+    public void setObjectMode(Constants.ObjectMode newMode) {objectMode = newMode;}
 
-    public void setDangerState(Engines.DangerState newDangerState) {dangerState = newDangerState;}
+    public void setDangerState(Constants.DangerState newDangerState) {dangerState = newDangerState;}
 
     public void addEnergy(int term) {
         energy = energy + term;
@@ -234,7 +230,7 @@ public class UIObject {
     public void checkState() {
         if (checkHungryDead())                                                  {
             objectMode = Dead;
-            System.out.println("Умер от голода");
+            //System.out.println("Умер от голода");
         }
 
         if (satiety < getMaxSatiety() * 0.2)                                        {hungryState = VeryHungry;}
@@ -266,30 +262,37 @@ public class UIObject {
         currentDirY = Math.sin(angle);
     }
 
-    private void avoidEdges() { // Определяем безопасную зону % от canvas
+    private void avoidEdges() {
         double marginX = CANVAS_WIDTH * EDGE_AVOIDANCE_PERCENT_X * 0.01;
         double marginY = CANVAS_HEIGHT * EDGE_AVOIDANCE_PERCENT_Y * 0.01;
 
-        // Если приближаемся к левому краю
+        boolean stuckNearEdge = false;
+
         if (centerX < marginX && currentDirX < 0) {
-            currentDirX = Math.abs(currentDirX) * 0.5 + 0.5; // Смещаем направление вправо
+            currentDirX = Math.abs(currentDirX) * 0.3 + 0.7;
+            stuckNearEdge = true;
         }
-        // Если приближаемся к правому краю
         else if (centerX > CANVAS_WIDTH - marginX && currentDirX > 0) {
-            currentDirX = -Math.abs(currentDirX) * 0.5 - 0.5; // Смещаем направление влево
+            currentDirX = -Math.abs(currentDirX) * 0.3 - 0.7;
+            stuckNearEdge = true;
         }
 
-        // Если приближаемся к верхнему краю
         if (centerY < marginY && currentDirY < 0) {
-            currentDirY = Math.abs(currentDirY) * 0.5 + 0.5; // Смещаем направление вниз
+            currentDirY = Math.abs(currentDirY) * 0.3 + 0.7;
+            stuckNearEdge = true;
         }
-        // Если приближаемся к нижнему краю
         else if (centerY > CANVAS_HEIGHT - marginY && currentDirY > 0) {
-            currentDirY = -Math.abs(currentDirY) * 0.5 - 0.5; // Смещаем направление вверх
+            currentDirY = -Math.abs(currentDirY) * 0.3 - 0.7;
+            stuckNearEdge = true;
         }
 
-        // Нормализуем вектор направления после изменений
-        double length = sqrt(currentDirX * currentDirX + currentDirY * currentDirY);
+        // Если застряли у края, добавляем случайную компоненту
+        if (stuckNearEdge && Math.random() < 0.3) {
+            currentDirX += (Math.random() - 0.5) * 0.5;
+            currentDirY += (Math.random() - 0.5) * 0.5;
+        }
+
+        double length = Math.sqrt(currentDirX * currentDirX + currentDirY * currentDirY);
         if (length > 0) {
             currentDirX /= length;
             currentDirY /= length;
@@ -407,13 +410,6 @@ public class UIObject {
         }
     };
 
-    // медведь
-//    protected double satietyModifier = 0.6; //модификатор насыщения (для крупных животных - штраф)
-//    protected int nutritionValue = 60; //сытность, хар-т питательность как жертвы
-//    protected int strongScore = 45; //сила
-//    protected int agilityScore = 20; //ловкость
-
-
     public static double calcDefenseModifier(double attackStrong, double defendStrong) {
         if (defendStrong == 0) {return 0.0;}
         double difference = Math.abs(attackStrong - defendStrong);
@@ -469,7 +465,7 @@ public class UIObject {
 
         } else {
             this.setObjectMode(Dead);
-            System.out.println("Жертва дала смертельный отпор!");
+            //System.out.println("Жертва дала смертельный отпор!");
             other.setEmotion(FuryEmotion);
         }
 

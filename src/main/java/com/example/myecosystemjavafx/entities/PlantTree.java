@@ -5,11 +5,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-import static com.example.myecosystemjavafx.Engines.*;
-import static com.example.myecosystemjavafx.Engines.HALF;
-//import static com.example.myecosystemjavafx.Engines.ObjectGender.*;
-import static com.example.myecosystemjavafx.Engines.ObjectMode.*;
-import static com.example.myecosystemjavafx.Engines.SeasonsOfYear.*;
+import static com.example.myecosystemjavafx.Constants.*;
+import static com.example.myecosystemjavafx.Constants.HALF;
+import static com.example.myecosystemjavafx.Constants.ObjectMode.*;
+import static com.example.myecosystemjavafx.Constants.SeasonsOfYear.*;
 
 public class PlantTree extends APlant {
 
@@ -20,6 +19,7 @@ public class PlantTree extends APlant {
     private final Color OBJECT_COLOR = Color.SEAGREEN;
     private final Color AUTUMN_OBJECT_COLOR = Color.ORANGE;
 
+    protected double longevity = 2;
 
     protected final double width = BASE_SIZE;
     protected final double height = BASE_SIZE;
@@ -52,10 +52,13 @@ public class PlantTree extends APlant {
 
     @Override
     public boolean getPregnant() {
-        if (age != 0 && age % 5 == 0) {
+        if (age != 0 && age % 5 == 0 && Math.random() < 0.33) {
             return true;
         } else {return false;}
     }
+
+    @Override
+    public double getLongevity() {return longevity;}
 
     @Override
     public PlantTree copy() {
@@ -67,9 +70,18 @@ public class PlantTree extends APlant {
         if (corpseTime == 0) {
             objectMode = Rest;
             corpseTime = PLANT_REBIRTH_TIME;
-        } else {
-            corpseTime -= 1;
-        }
+        } else {corpseTime -= 1;}
+    }
+
+    @Override
+    public boolean isCorpseDelete() {
+        if (objectMode == Dead && age > 6) {
+            if (corpseTime == 1 && Math.random() < 0.5) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {return false;}
     }
 
     public static void loadImages(String summerImagePath, String autumnImagePath, String deadImagePath) {

@@ -3,7 +3,7 @@ package com.example.myecosystemjavafx;
 import javafx.scene.canvas.GraphicsContext;
 import com.example.myecosystemjavafx.entities.UIObject;
 import javafx.scene.image.Image;
-import static com.example.myecosystemjavafx.Engines.*;
+import static com.example.myecosystemjavafx.Constants.*;
 
 public class Emotions {
 
@@ -12,7 +12,9 @@ public class Emotions {
     private static Image furyEmotionImage;
     private static Image jawsEmotionImage;
     private static Image loveEmotionImage;
+    private static Image oldDeadEmotionImage;
     private static boolean emotionsImageLoaded = false;
+    private static double emotionSize = BASE_SIZE * 1.3;
 
 
     public static void loadEmotionImages() {
@@ -22,6 +24,7 @@ public class Emotions {
             furyEmotionImage = new Image("/furyEmotion.png");
             jawsEmotionImage = new Image("/jawsEmotion.png");
             loveEmotionImage = new Image("/loveEmotion.png");
+            oldDeadEmotionImage = new Image("/oldDeadEmotion.png");
             emotionsImageLoaded = true;
         } catch (Exception e) {
             System.err.println("Не удалось загрузить эмоции: " + e.getMessage());
@@ -36,10 +39,10 @@ public class Emotions {
 
         gc.drawImage(
                 emotionImage,
-                object.getInterX() - 0.5 * BASE_SIZE + shakeX,
-                object.getInterY() - 2 * BASE_SIZE + shakeY,
-                BASE_SIZE,
-                BASE_SIZE
+                object.getInterX() - 0.1 * emotionSize + shakeX,
+                object.getInterY() - 1.5 * emotionSize + shakeY,
+                emotionSize,
+                emotionSize
         );
     }
 
@@ -59,6 +62,9 @@ public class Emotions {
                 break;
             case LoveEmotion:
                 playEmotion(gc, object, loveEmotionImage);
+                break;
+            case OldDeadEmotion:
+                playEmotion(gc, object, oldDeadEmotionImage);
                 break;
             default:
                 break;

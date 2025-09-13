@@ -4,9 +4,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-import static com.example.myecosystemjavafx.Engines.*;
-import static com.example.myecosystemjavafx.Engines.ObjectGender.*;
-import static com.example.myecosystemjavafx.Engines.ObjectMode.*;
+import static com.example.myecosystemjavafx.Constants.*;
+import static com.example.myecosystemjavafx.Constants.ObjectGender.*;
+import static com.example.myecosystemjavafx.Constants.ObjectMode.*;
 
 
 public class HerbivoryDeer extends AHerbivory {
@@ -15,6 +15,8 @@ public class HerbivoryDeer extends AHerbivory {
     protected static boolean imageLoaded = false;
     protected static Image femaleImage;
     protected static Image deadImage;
+
+    protected double longevity = 1;
 
     protected final double width = BASE_SIZE * 1.1;
     protected final double height = BASE_SIZE * 1.1;
@@ -26,7 +28,7 @@ public class HerbivoryDeer extends AHerbivory {
 
     protected double satietyModifier = 0.75; //модификатор насыщения (для крупных животных - штраф)
     protected int nutritionValue = 60; //сытность, хар-т питательность как жертвы
-    protected int strongScore = 20; //сила
+    protected int strongScore = 22; //сила
     protected int agilityScore = 25; //ловкость
 
     public HerbivoryDeer(){
@@ -51,6 +53,9 @@ public class HerbivoryDeer extends AHerbivory {
 
     @Override
     protected int getMaxNumberOfChildren() {return maxNumberOfChildren;}
+
+    @Override
+    public double getLongevity() {return longevity;}
 
     @Override
     public HerbivoryDeer copy() {

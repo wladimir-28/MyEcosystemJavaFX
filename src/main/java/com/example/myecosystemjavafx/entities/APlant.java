@@ -1,14 +1,11 @@
 package com.example.myecosystemjavafx.entities;
 
-import javafx.scene.paint.Color;
-
-import static com.example.myecosystemjavafx.Engines.ObjectMode.*;
-import static com.example.myecosystemjavafx.Engines.PLANT_REBIRTH_TIME;
+import static com.example.myecosystemjavafx.Constants.ObjectMode.*;
+import static com.example.myecosystemjavafx.Constants.PLANT_REBIRTH_TIME;
 
 public class APlant extends UIObject {
 
     protected int corpseTime = PLANT_REBIRTH_TIME;
-    protected boolean isPregnant = false;
 
     public APlant() {
         super();
@@ -43,6 +40,4 @@ public class APlant extends UIObject {
 
     @Override
     public void restAction() { }
-
-
 }

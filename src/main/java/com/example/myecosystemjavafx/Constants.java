@@ -2,7 +2,7 @@ package com.example.myecosystemjavafx;
 
 import static java.lang.Math.sqrt;
 
-public class Engines {
+public class Constants {
     public static final int CANVAS_WIDTH = 1520; // ширина поля
     public static final int CANVAS_HEIGHT = 800; // высота поля
     public static final int SECOND_IN_SEASON = 10;
@@ -13,7 +13,7 @@ public class Engines {
 
 
     public static final double BASE_SIZE = 10; // базовый размер объекта
-    public static final double BIG_RADIUS_VISION = BASE_SIZE * 60;
+    public static final double BIG_RADIUS_VISION = BASE_SIZE * 65;
     public static final double SMALL_RADIUS_VISION = BASE_SIZE * 18;
     public static final int CHANCE_OF_SENSING_DANGER = 20;
     public static final double RADIUS_INTERACTION = BASE_SIZE; // радиус взаимодействия обьектов
@@ -29,7 +29,7 @@ public class Engines {
     public static final int GROWING_UP_AGE = 1;
     public static final int PLANT_GROWING_UP_AGE = 5;
     public static final int CORPSE_TIME = 3; // время существования трупа (циклов/секунд)
-    public static final int PLANT_REBIRTH_TIME = 15; // время до возрождения растений
+    public static final int PLANT_REBIRTH_TIME = 10; // время до возрождения растений
 
     public static final int ENERGY_FOR_WALKING = -1;
     public static final int ENERGY_FOR_HUNTING = -2;
@@ -48,8 +48,8 @@ public class Engines {
 
     public static double randomValueNearby() {
         return (Math.random() < 0.5) ?
-                (-1.5 * BASE_SIZE + (Math.random() * BASE_SIZE)) :
-                (0.5 * BASE_SIZE + (Math.random() * BASE_SIZE));}
+                (-2.0 * BASE_SIZE + (Math.random() * BASE_SIZE)) :
+                (1.5 * BASE_SIZE + (Math.random() * BASE_SIZE));}
 
     public enum SeasonsOfYear {
         Spring,
@@ -99,6 +99,7 @@ public class Engines {
         FuryEmotion,
         SprintEmotion,
         JawsEmotion,
-        LoveEmotion
+        LoveEmotion,
+        OldDeadEmotion
     }
 }
