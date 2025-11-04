@@ -6,15 +6,16 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-public class MyEcosystemApplication extends Application {
+import static com.example.myecosystemjavafx.Constants.*;
+
+public class MyEcosysApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MyEcosystemApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1600, 950);
+        FXMLLoader fxmlLoader = new FXMLLoader(MyEcosysApplication.class.getResource("hello-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), WINDOW_WIDTH, WINDOW_HEIGHT);
         stage.setTitle("MyEcosystem");
         stage.setScene(scene);
-        //stage.setMaximized(true);
         stage.show();
     }
 

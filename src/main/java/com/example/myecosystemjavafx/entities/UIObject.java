@@ -1,13 +1,15 @@
 package com.example.myecosystemjavafx.entities;
 
 import com.example.myecosystemjavafx.Constants;
-import com.example.myecosystemjavafx.MyEcosystemController;
+import com.example.myecosystemjavafx.MyEcosysLifeSim;
+import com.example.myecosystemjavafx.EmojiLoader;
+import com.example.myecosystemjavafx.MathFunc;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import java.util.Random;
 
-import static com.example.myecosystemjavafx.Constants.EmotionsType.*;
+import static com.example.myecosystemjavafx.Constants.EmojiType.*;
 import static com.example.myecosystemjavafx.Constants.*;
 import static com.example.myecosystemjavafx.Constants.EnergyState.*;
 import static com.example.myecosystemjavafx.Constants.HungryState.*;
@@ -15,7 +17,7 @@ import static com.example.myecosystemjavafx.Constants.ObjectGender.*;
 import static com.example.myecosystemjavafx.Constants.ObjectMode.*;
 import static java.lang.Math.sqrt;
 
-public class UIObject {
+public abstract class UIObject {
     private static int counterId = 1;
     protected static int counterObjects = 0;
     protected int id;
@@ -50,9 +52,9 @@ public class UIObject {
     protected double partnerDistance = 2 * BIG_RADIUS_VISION;
 
     protected int maxSatiety = 60;
-    protected int satiety = 50;// пока что хардкод
+    protected int satiety = 50;
     protected final int MAX_ENERGY = 30;
-    protected int energy = 30;// пока что хардкод
+    protected int energy = 30;
 
     protected double satietyModifier; //модификатор насыщения (для крупных животных - штраф)
     protected int nutritionValue; //сытность, хар-т питательность как жертвы
@@ -74,13 +76,13 @@ public class UIObject {
     protected Constants.EnergyState energyState;
     protected Constants.DangerState dangerState;
     protected Constants.ObjectMode objectMode;
-    protected EmotionsType emotion = None;
+    protected EmojiType emotion = None;
 
 
     public UIObject() {
         id = counterId++;
         counterObjects++;
-        objectGender = Constants.getRandomGender();
+        objectGender = MathFunc.getRandomGender();
         age = 0;
         //System.out.println("new counterObjects = " + counterObjects);
 
@@ -91,23 +93,20 @@ public class UIObject {
         previousX = centerX;
         previousY = centerY;
     }
-
+    
+    @SuppressWarnings("CopyConstructorMissesField") // точная копия не требуется
     public UIObject(UIObject original) {
         id = counterId++;
         counterObjects++;
-        objectGender = Constants.getRandomGender();
+        objectGender = MathFunc.getRandomGender();
         age = 0;
-        //System.out.println("copy counterObjects = " + counterObjects);
-
-        this.centerX = original.centerX + Constants.randomValueNearby();
-        this.centerY = original.centerY + Constants.randomValueNearby();
+        this.centerX = original.centerX + MathFunc.randomValueNearby();
+        this.centerY = original.centerY + MathFunc.randomValueNearby();
         previousX = centerX;
         previousY = centerY;
     }
 
-    public UIObject copy() {
-        return new UIObject(this);
-    }
+    public abstract  UIObject cloneObject();
 
     public static int getCounterObjects() {
         return counterObjects;
@@ -119,7 +118,7 @@ public class UIObject {
 
     public int getId() { return id; }
 
-    public void getInfo() {}
+    public abstract void getInfo();
 
     public ObjectGender getGender() {return objectGender;}
 
@@ -129,12 +128,7 @@ public class UIObject {
 
     public void printObject(GraphicsContext gc, double updateInterval) { }
 
-    public void printThisObject(Class<?> Loader, GraphicsContext gc, double updateInterval) { }
-
-    protected Color getStrokeColor() {return Color.BLACK;}
-
     /// ////////////////////////////////////////////////////////
-    //public int getSatiety() {return satiety;}
 
     public double getCenterX() {return centerX;}
     public double getCenterY() {return centerY;}
@@ -188,9 +182,9 @@ public class UIObject {
 
     public Constants.ObjectMode getObjectMode() {return objectMode;}
 
-    public Constants.EmotionsType getEmotion() {return emotion;}
+    public EmojiType getEmotion() {return emotion;}
 
-    public void setEmotion(EmotionsType newEmotion) {emotion = newEmotion;}
+    public void setEmotion(EmojiType newEmotion) {emotion = newEmotion;}
 
     public void setObjectMode(Constants.ObjectMode newMode) {objectMode = newMode;}
 
@@ -218,11 +212,7 @@ public class UIObject {
     }
 
     public boolean isItPartner(UIObject other) {
-        if (this.getClass().equals(other.getClass()) && other.getAge() >= 1 && this.getGender() != other.getGender()) {
-            //System.out.println("Партнер!!!");
-            return true;
-        }
-        else return false;
+        return this.getClass().equals(other.getClass()) && other.getAge() >= 1 && this.getGender() != other.getGender();
     }
 
     public boolean checkHungryDead() {return satiety == 0;}
@@ -256,13 +246,13 @@ public class UIObject {
         return (distanceSquared <= (radius * radius) && distanceSquared != 0);
     }
 
-    private void randomDirection() { // Генерируем случайное направление
+    protected void randomDirection() { // Генерируем случайное направление
         double angle = Math.random() * 2 * Math.PI;
         currentDirX = Math.cos(angle);
         currentDirY = Math.sin(angle);
     }
-
-    private void avoidEdges() {
+    
+    protected void avoidEdges() {
         double marginX = CANVAS_WIDTH * EDGE_AVOIDANCE_PERCENT_X * 0.01;
         double marginY = CANVAS_HEIGHT * EDGE_AVOIDANCE_PERCENT_Y * 0.01;
 
@@ -321,10 +311,8 @@ public class UIObject {
             double distance = getPartnerDistance();
             if (distance > BASE_SIZE) {
                 // Нормализуем вектор
-                if (distance > 0) {
-                    currentDirX /= distance;
-                    currentDirY /= distance;
-                }
+                currentDirX /= distance;
+                currentDirY /= distance;
             } else {
                 // Если уже на нужном расстоянии или ближе, останавливаемся
                 currentDirX = 0;
@@ -344,7 +332,7 @@ public class UIObject {
         previousX = centerX;
         previousY = centerY;
         addEnergy(ENERGY_FROM_REST);
-        emotion = SleepEmotion;
+        emotion = SleepEmoji;
     }
 
     public void huntingAction() {
@@ -408,7 +396,7 @@ public class UIObject {
                 deadAction();
                 break;
         }
-    };
+    }
 
     public static double calcDefenseModifier(double attackStrong, double defendStrong) {
         if (defendStrong == 0) {return 0.0;}
@@ -436,7 +424,7 @@ public class UIObject {
             setPregnant(true);
             //System.out.println("Беременна");
         }
-        setEmotion(LoveEmotion);
+        setEmotion(LoveEmoji);
     }
 
     public void catchTarget(UIObject other) {
@@ -451,22 +439,22 @@ public class UIObject {
             double satietyGain = this.getSatietyModifier() * other.getNutritionValue();
             this.addSatiety((int)satietyGain); // + 50 было
             other.setObjectMode(Dead);
-            MyEcosystemController.shareFood(this, (int)(satietyGain)); //поделить добычу !
+            MyEcosysLifeSim.shareFood(this, (int)(satietyGain)); //поделить добычу !
             if (this instanceof ACarnivora) {
-                this.setEmotion(JawsEmotion);
+                this.setEmotion(JawsEmoji);
             }
             //System.out.println("Атака успешна");
 
         } else if (battleResult >= criticalFailProbability) {
             this.addEnergy(-30);
             other.addEnergy(20);
-            other.setEmotion(SprintEmotion);
+            other.setEmotion(SprintEmoji);
             //System.out.println("Жертва дала отпор");
 
         } else {
             this.setObjectMode(Dead);
-            //System.out.println("Жертва дала смертельный отпор!");
-            other.setEmotion(FuryEmotion);
+            //System.out.println("Жертва дала смертельный отпор!" );
+            other.setEmotion(FuryEmoji);
         }
 
         this.setTarget(0, 0);

@@ -5,17 +5,15 @@ import com.example.myecosystemjavafx.entities.UIObject;
 import javafx.scene.image.Image;
 import static com.example.myecosystemjavafx.Constants.*;
 
-public class Emotions {
-
+public class EmojiLoader {
     private static Image sleepEmotionImage;
     private static Image sprintEmotionImage;
     private static Image furyEmotionImage;
     private static Image jawsEmotionImage;
     private static Image loveEmotionImage;
     private static Image oldDeadEmotionImage;
+    private static final double emotionSize = BASE_SIZE * 1.3;
     private static boolean emotionsImageLoaded = false;
-    private static double emotionSize = BASE_SIZE * 1.3;
-
 
     public static void loadEmotionImages() {
         try {
@@ -47,23 +45,24 @@ public class Emotions {
     }
 
     public static void drawEmotion(GraphicsContext gc, UIObject object) {
+        if(!emotionsImageLoaded) {return;}
         switch (object.getEmotion()) {
-            case SleepEmotion:
+            case SleepEmoji:
                 playEmotion(gc, object, sleepEmotionImage);
                 break;
-            case FuryEmotion:
+            case FuryEmoji:
                 playEmotion(gc, object, furyEmotionImage);
                 break;
-            case SprintEmotion:
+            case SprintEmoji:
                 playEmotion(gc, object, sprintEmotionImage);
                 break;
-            case JawsEmotion:
+            case JawsEmoji:
                 playEmotion(gc, object, jawsEmotionImage);
                 break;
-            case LoveEmotion:
+            case LoveEmoji:
                 playEmotion(gc, object, loveEmotionImage);
                 break;
-            case OldDeadEmotion:
+            case OldDeadEmoji:
                 playEmotion(gc, object, oldDeadEmotionImage);
                 break;
             default:

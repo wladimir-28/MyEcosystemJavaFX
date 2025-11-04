@@ -1,6 +1,6 @@
 package com.example.myecosystemjavafx.entities;
 
-import com.example.myecosystemjavafx.MyEcosystemController;
+import com.example.myecosystemjavafx.MyEcosysSeasonManager;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -16,8 +16,8 @@ public class PlantSmallShrub extends APlant {
     protected static boolean imageLoaded = false;
     protected static Image autumnImage;
     protected static Image deadImage;
-    private final Color OBJECT_COLOR = Color.SEAGREEN;
-    private final Color AUTUMN_OBJECT_COLOR = Color.ORANGE;
+    protected final Color OBJECT_COLOR = Color.SEAGREEN;
+    protected final Color AUTUMN_OBJECT_COLOR = Color.ORANGE;
 
     protected double longevity = 0.5;
 
@@ -37,8 +37,13 @@ public class PlantSmallShrub extends APlant {
     protected int maxNumberOfChildren = 2;
 
     public PlantSmallShrub(){super();}
-
+    
+    @SuppressWarnings("CopyConstructorMissesField") // точная копия не требуется
     public PlantSmallShrub(PlantSmallShrub original) {super(original);}
+
+    public PlantSmallShrub cloneObject() {
+        return new PlantSmallShrub(this);
+    }
 
     @Override
     public double getSatietyModifier() {return satietyModifier;}
@@ -57,19 +62,11 @@ public class PlantSmallShrub extends APlant {
 
     @Override
     public boolean getPregnant() {
-        if (age != 0  && Math.random() < 0.5) {
-            return true;
-        } else {return false;}
+        return age != 0 && Math.random() < 0.5;
     }
 
     @Override
     public double getLongevity() {return longevity;}
-
-    @Override
-    public PlantSmallShrub copy() {
-        return new PlantSmallShrub(this);
-    }
-
 
     public static void loadImages(String summerImagePath, String autumnImagePath, String deadImagePath) {
         try {
@@ -86,14 +83,14 @@ public class PlantSmallShrub extends APlant {
 
     @Override
     public void printObject(GraphicsContext gc, double alpha) {
-        if (objectMode == Dead || MyEcosystemController.getSeasonOfYear() == Winter) {
+        if (objectMode == Dead || MyEcosysSeasonManager.getSeasonOfYear() == Winter) {
             drawDeadObject(gc);
             return;
         }
             drawAdult(gc);
     }
-
-    private void drawDeadObject(GraphicsContext gc) {
+    
+    protected void drawDeadObject(GraphicsContext gc) {
         boolean isBaby = getAge() < PLANT_GROWING_UP_AGE;
 
         double currentWidth = isBaby ? babyWidth : width;
@@ -107,9 +104,9 @@ public class PlantSmallShrub extends APlant {
             drawDeadTriangle(gc, currentWidth, currentHeight, currentLength);
         }
     }
-
-    private void drawAdult(GraphicsContext gc) {
-        boolean isAutumn = MyEcosystemController.getSeasonOfYear() == Autumn;
+    
+    protected void drawAdult(GraphicsContext gc) {
+        boolean isAutumn = MyEcosysSeasonManager.getSeasonOfYear() == Autumn;
 
         if (imageLoaded) {
             drawImage(gc, isAutumn ? autumnImage : summerImage, width, height);
@@ -117,8 +114,8 @@ public class PlantSmallShrub extends APlant {
             drawFallbackTriangle(gc, width, height, length, isAutumn);
         }
     }
-
-    private void drawImage(GraphicsContext gc, Image image, double imgWidth, double imgHeight) {
+    
+    protected void drawImage(GraphicsContext gc, Image image, double imgWidth, double imgHeight) {
         double centerX = getCenterX() - imgWidth * HALF;
         double centerY = getCenterY() - imgHeight * HALF;
         double scaledWidth = imageCorrection * imgWidth;
@@ -126,13 +123,12 @@ public class PlantSmallShrub extends APlant {
 
         gc.drawImage(image, centerX, centerY, scaledWidth, scaledHeight);
     }
-
-    private void drawFallbackTriangle(GraphicsContext gc, double rectWidth, double rectHeight, double rectLength, boolean isAutumn) {
+    
+    protected void drawFallbackTriangle(GraphicsContext gc, double rectWidth, double rectHeight, double rectLength, boolean isAutumn) {
         double centerX = getCenterX();
         double centerY = getCenterY();
-        double length = rectLength;
-
-
+        
+        
         if (isAutumn) {
             gc.setFill(AUTUMN_OBJECT_COLOR);
         } else {
@@ -141,9 +137,9 @@ public class PlantSmallShrub extends APlant {
 
 
         gc.beginPath();
-        gc.moveTo(centerX, centerY - length);
-        gc.lineTo(centerX - length, centerY + length);
-        gc.lineTo(centerX + length, centerY + length);
+        gc.moveTo(centerX, centerY - rectLength);
+        gc.lineTo(centerX - rectLength, centerY + rectLength);
+        gc.lineTo(centerX + rectLength, centerY + rectLength);
         gc.closePath();
         gc.fill();
 
@@ -151,24 +147,23 @@ public class PlantSmallShrub extends APlant {
         gc.setStroke(STROKE_COLOR);
         gc.setLineWidth(1);
         gc.beginPath();
-        gc.moveTo(centerX, centerY - length);
-        gc.lineTo(centerX - length, centerY + length);
-        gc.lineTo(centerX + length, centerY + length);
+        gc.moveTo(centerX, centerY - rectLength);
+        gc.lineTo(centerX - rectLength, centerY + rectLength);
+        gc.lineTo(centerX + rectLength, centerY + rectLength);
         gc.closePath();
         gc.stroke();
     }
-
-    private void drawDeadTriangle(GraphicsContext gc, double rectWidth, double rectHeight, double rectLength) {
+    
+    protected void drawDeadTriangle(GraphicsContext gc, double rectWidth, double rectHeight, double rectLength) {
         double centerX = getCenterX();
         double centerY = getCenterY();
-        double length = rectLength;
-
+        
         gc.setStroke(STROKE_COLOR);
         gc.setLineWidth(1);
         gc.beginPath();
-        gc.moveTo(centerX, centerY - length);
-        gc.lineTo(centerX - length, centerY + length);
-        gc.lineTo(centerX + length, centerY + length);
+        gc.moveTo(centerX, centerY - rectLength);
+        gc.lineTo(centerX - rectLength, centerY + rectLength);
+        gc.lineTo(centerX + rectLength, centerY + rectLength);
         gc.closePath();
         gc.stroke();
     }
