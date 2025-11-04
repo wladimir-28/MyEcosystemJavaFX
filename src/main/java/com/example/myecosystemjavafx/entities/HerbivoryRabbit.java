@@ -5,7 +5,6 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import static com.example.myecosystemjavafx.Constants.*;
-import static com.example.myecosystemjavafx.Constants.HALF;
 import static com.example.myecosystemjavafx.Constants.ObjectGender.*;
 import static com.example.myecosystemjavafx.Constants.ObjectMode.Dead;
 
@@ -34,8 +33,13 @@ public class HerbivoryRabbit extends AHerbivory {
 
 
     public HerbivoryRabbit(){super();}
-
+    
+    @SuppressWarnings("CopyConstructorMissesField") // точная копия не требуется
     public HerbivoryRabbit(HerbivoryRabbit original) {super(original);}
+
+    public HerbivoryRabbit cloneObject() {
+        return new HerbivoryRabbit(this);
+    }
 
     @Override
     public double getSatietyModifier() {return satietyModifier;}
@@ -55,12 +59,6 @@ public class HerbivoryRabbit extends AHerbivory {
     @Override
     public double getLongevity() {return longevity;}
 
-    @Override
-    public HerbivoryRabbit copy() {
-        return new HerbivoryRabbit(this);
-    }
-
-
     public static void loadImages(String maleImagePath, String femaleImagePath, String deadImagePath) {
         try {
             maleImage = new Image(HerbivoryRabbit.class.getResourceAsStream(maleImagePath));
@@ -76,7 +74,7 @@ public class HerbivoryRabbit extends AHerbivory {
 
 
     // Постоянные цвета в полях класса
-    private final Color OBJECT_COLOR = Color.LIGHTGREY;
+    protected final Color OBJECT_COLOR = Color.LIGHTGREY;
 
 
     @Override
@@ -95,8 +93,8 @@ public class HerbivoryRabbit extends AHerbivory {
             drawAdult(gc);
         }
     }
-
-    private void drawDeadObject(GraphicsContext gc) {
+    
+    protected void drawDeadObject(GraphicsContext gc) {
         boolean isBaby = getAge() < GROWING_UP_AGE;
 
         double currentWidth = isBaby ? babyWidth : width;
@@ -108,16 +106,16 @@ public class HerbivoryRabbit extends AHerbivory {
             drawDeadSquare(gc, currentWidth, currentHeight);
         }
     }
-
-    private void drawBaby(GraphicsContext gc) {
+    
+    protected void drawBaby(GraphicsContext gc) {
         if (imageLoaded) {
             drawImage(gc, femaleImage, babyWidth, babyHeight);
         } else {
             drawFallbackSquare(gc, babyWidth, babyHeight, false);
         }
     }
-
-    private void drawAdult(GraphicsContext gc) {
+    
+    protected void drawAdult(GraphicsContext gc) {
         boolean isFemale = getGender() == Female;
 
         if (imageLoaded) {
@@ -126,8 +124,8 @@ public class HerbivoryRabbit extends AHerbivory {
             drawFallbackSquare(gc, width, height, !isFemale);
         }
     }
-
-    private void drawImage(GraphicsContext gc, Image image, double imgWidth, double imgHeight) {
+    
+    protected void drawImage(GraphicsContext gc, Image image, double imgWidth, double imgHeight) {
         double centerX = getInterX() - imgWidth * HALF;
         double centerY = getInterY() - imgHeight * HALF;
         double scaledWidth = imageCorrection * imgWidth;
@@ -135,8 +133,8 @@ public class HerbivoryRabbit extends AHerbivory {
 
         gc.drawImage(image, centerX, centerY, scaledWidth, scaledHeight);
     }
-
-    private void drawFallbackSquare(GraphicsContext gc, double rectWidth, double rectHeight, boolean isMale) {
+    
+    protected void drawFallbackSquare(GraphicsContext gc, double rectWidth, double rectHeight, boolean isMale) {
         double x = getInterX() - rectWidth * HALF;
         double y = getInterY() - rectHeight * HALF;
         double w = rectWidth;
@@ -161,8 +159,8 @@ public class HerbivoryRabbit extends AHerbivory {
             gc.fillOval(centerX - dotRadius, centerY - dotRadius, dotRadius * 2, dotRadius * 2);
         }
     }
-
-    private void drawDeadSquare(GraphicsContext gc, double rectWidth, double rectHeight) {
+    
+    protected void drawDeadSquare(GraphicsContext gc, double rectWidth, double rectHeight) {
         double x = getInterX() - rectWidth * HALF;
         double y = getInterY() - rectHeight * HALF;
         double w = rectWidth;

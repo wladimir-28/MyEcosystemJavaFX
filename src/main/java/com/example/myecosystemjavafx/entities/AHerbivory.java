@@ -4,12 +4,12 @@ import com.example.myecosystemjavafx.MyEcosystemController;
 
 import static com.example.myecosystemjavafx.Constants.*;
 import static com.example.myecosystemjavafx.Constants.DangerState.Danger;
-import static com.example.myecosystemjavafx.Constants.EmotionsType.None;
+import static com.example.myecosystemjavafx.Constants.EmojiType.None;
 import static com.example.myecosystemjavafx.Constants.EnergyState.*;
 import static com.example.myecosystemjavafx.Constants.HungryState.*;
 import static com.example.myecosystemjavafx.Constants.ObjectMode.*;
 
-public class AHerbivory extends UIObject {
+public abstract class AHerbivory extends UIObject {
 
     protected double speedModBase = HERBIVORY_SPEED_MOD_BASE;
     protected double speedModFromState = 1;
@@ -21,40 +21,21 @@ public class AHerbivory extends UIObject {
     protected double smallRadiusVision = SMALL_RADIUS_VISION * smallRadiusModBase * smallRadiusModState;
 
     protected int corpseTime = CORPSE_TIME;
-    protected EmotionsType emotion = None;
+    protected EmojiType emotion = None;
 
-    public AHerbivory () {
-        super();
-    }
+    public AHerbivory () {super();}
+    
+    @SuppressWarnings("CopyConstructorMissesField") // точная копия не требуется
+    public AHerbivory (AHerbivory  original) {super(original);}
 
-    public AHerbivory (AHerbivory  original) {
-        super(original);
-    }
-
-    @Override
-    public AHerbivory  copy() {
-        return new AHerbivory (this);
-    }
-
-    @Override
-    public double getBigRadiusVision() {
-        return bigRadiusVision;
-    }
-
+    public abstract AHerbivory cloneObject();
+    
     @Override
     public double getSmallRadiusVision() {
         return smallRadiusVision;
     }
 
-    @Override
-    public void getInfo() {
-        //System.out.println("ID: " + getId());
-        //System.out.println("Возраст: " + getAge());
-        //System.out.println("speedModFromState: " + speedModFromState);
-        //System.out.println("Mode: " + objectMode);
-        //System.out.println("danger x y: " + "\t" + dangerX + "\t" + dangerY);
-        //System.out.println("Скорость: " + speed);
-    }
+    public void getInfo() {}
 
     @Override
     public void giveBuffDebuff() {
@@ -63,9 +44,7 @@ public class AHerbivory extends UIObject {
         double energyMod = 1;
         double seasonMod = 1;
 
-        if (MyEcosystemController.getSeasonOfYear() == SeasonsOfYear.Winter) {
-            seasonMod = 0.9;
-        } else {seasonMod = 1;}
+        if (MyEcosystemController.getSeasonOfYear() == SeasonsOfYear.Winter) {seasonMod = 0.9;}
         if (dangerState == Danger) {dangerMod = 1.4;}
         if (hungryState == VeryHungry) {hungryMod = 0.6;}
         else if (hungryState == Hungry) {hungryMod = 0.9;}
@@ -82,7 +61,7 @@ public class AHerbivory extends UIObject {
     @Override
     public void selectObjectMode() {
         if (objectMode == Dead || satiety == 0)                             {objectMode = Dead;}
-        else if (dangerState == Danger && hungryState != VeryHungry)                                     {objectMode = Fleeing;}
+        else if (dangerState == Danger && hungryState != VeryHungry)        {objectMode = Fleeing;}
         else if ((hungryState == VeryHungry && energyState != VeryLowEnergy) ||
                 (hungryState == Hungry && energyState != LowEnergy))        {objectMode = Hunting;}
         else if ((objectMode == Rest && energy != MAX_ENERGY) ||

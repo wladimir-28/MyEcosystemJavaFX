@@ -34,7 +34,8 @@ public class HerbivoryDeer extends AHerbivory {
     public HerbivoryDeer(){
         super();
     }
-
+    
+    @SuppressWarnings("CopyConstructorMissesField") // точная копия не требуется
     public HerbivoryDeer(HerbivoryDeer original) {
         super(original);
     }
@@ -58,7 +59,7 @@ public class HerbivoryDeer extends AHerbivory {
     public double getLongevity() {return longevity;}
 
     @Override
-    public HerbivoryDeer copy() {
+    public HerbivoryDeer cloneObject() {
         return new HerbivoryDeer(this);
     }
 
@@ -77,7 +78,7 @@ public class HerbivoryDeer extends AHerbivory {
 
 
     // Постоянные цвета в полях класса
-    private final Color OBJECT_COLOR = Color.SANDYBROWN;
+    protected final Color OBJECT_COLOR = Color.SANDYBROWN;
 
 
     @Override
@@ -97,7 +98,7 @@ public class HerbivoryDeer extends AHerbivory {
         }
     }
 
-    private void drawDeadObject(GraphicsContext gc) {
+    protected void drawDeadObject(GraphicsContext gc) {
         boolean isBaby = getAge() < GROWING_UP_AGE;
 
         double currentWidth = isBaby ? babyWidth : width;
@@ -110,7 +111,7 @@ public class HerbivoryDeer extends AHerbivory {
         }
     }
 
-    private void drawBaby(GraphicsContext gc) {
+    protected void drawBaby(GraphicsContext gc) {
         if (imageLoaded) {
             drawImage(gc, femaleImage, babyWidth, babyHeight);
         } else {
@@ -118,7 +119,7 @@ public class HerbivoryDeer extends AHerbivory {
         }
     }
 
-    private void drawAdult(GraphicsContext gc) {
+    protected void drawAdult(GraphicsContext gc) {
         boolean isFemale = getGender() == Female;
 
         if (imageLoaded) {
@@ -128,7 +129,7 @@ public class HerbivoryDeer extends AHerbivory {
         }
     }
 
-    private void drawImage(GraphicsContext gc, Image image, double imgWidth, double imgHeight) {
+    protected void drawImage(GraphicsContext gc, Image image, double imgWidth, double imgHeight) {
         double centerX = getInterX() - imgWidth * HALF;
         double centerY = getInterY() - imgHeight * HALF;
         double scaledWidth = imageCorrection * imgWidth;
@@ -137,7 +138,7 @@ public class HerbivoryDeer extends AHerbivory {
         gc.drawImage(image, centerX, centerY, scaledWidth, scaledHeight);
     }
 
-    private void drawFallbackSquare(GraphicsContext gc, double rectWidth, double rectHeight, boolean isMale) {
+    protected void drawFallbackSquare(GraphicsContext gc, double rectWidth, double rectHeight, boolean isMale) {
         double x = getInterX() - rectWidth * HALF;
         double y = getInterY() - rectHeight * HALF;
         double w = rectWidth;
@@ -163,7 +164,7 @@ public class HerbivoryDeer extends AHerbivory {
         }
     }
 
-    private void drawDeadSquare(GraphicsContext gc, double rectWidth, double rectHeight) {
+    protected void drawDeadSquare(GraphicsContext gc, double rectWidth, double rectHeight) {
         double x = getInterX() - rectWidth * HALF;
         double y = getInterY() - rectHeight * HALF;
         double w = rectWidth;

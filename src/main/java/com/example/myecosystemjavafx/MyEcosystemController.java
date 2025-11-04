@@ -15,10 +15,10 @@ import java.util.ListIterator;
 import com.example.myecosystemjavafx.entities.*;
 import javafx.scene.paint.Color;
 
-import static com.example.myecosystemjavafx.Emotions.loadEmotionImages;
+import static com.example.myecosystemjavafx.EmojiLoader.loadEmotionImages;
 import static com.example.myecosystemjavafx.Constants.*;
 import static com.example.myecosystemjavafx.Constants.DangerState.*;
-import static com.example.myecosystemjavafx.Constants.EmotionsType.*;
+import static com.example.myecosystemjavafx.Constants.EmojiType.*;
 import static com.example.myecosystemjavafx.Constants.ObjectMode.*;
 import static com.example.myecosystemjavafx.Constants.SeasonsOfYear.*;
 
@@ -51,7 +51,7 @@ public class MyEcosystemController {
     private final long LIFE_UPDATE_INTERVAL = 1_000_000_000L;
     private final long SEASON_INTERVAL = SECOND_IN_SEASON * 1_000_000_000L;
     private final long YEAR_INTERVAL = SECOND_IN_SEASON * 4_000_000_000L;
-    private static final long TARGET_FRAME_TIME = 22_222_222L;; // 45 FPS
+    private static final long TARGET_FRAME_TIME = 22_222_222L; // 45 FPS
 
     public static SeasonsOfYear getSeasonOfYear() {return seasonOfYear;}
 
@@ -113,33 +113,16 @@ public class MyEcosystemController {
                 continue;
             }
             double random = Math.random();
-            double deathProbability = getDeathProbability(object.getAge(), object.getLongevity());
+            double deathProbability = MathFunc.getDeathProbability(object.getAge(), object.getLongevity());
 
             if (random < deathProbability) {
                 object.setObjectMode(Dead);
-                object.setEmotion(OldDeadEmotion);
-                //System.out.println("Умер от старости");
+                object.setEmotion(OldDeadEmoji);
             }
         }
     }
 
-    private double getDeathProbability(int age, double longevity) {
-        switch (age) {
-            case 1: return 0.015 * (1/longevity);
-            case 2: return 0.015 * (1/longevity);
-            case 3: return 0.015 * (1/longevity);
-            case 4: return 0.015 * (1/longevity);
-            case 5: return 0.02 * (1/longevity);
-            case 6: return 0.03 * (1/longevity);
-            case 7: return 0.05 * (1/longevity);
-            case 8: return 0.08 * (1/longevity);
-            case 9: return 0.11 * (1/longevity);
-            case 10: return 0.15 * (1/longevity);
-            case 11: return 0.175 * (1/longevity);
-            case 12: return 0.2 * (1/longevity);
-            default: return 0.225 * (1/longevity);
-        }
-    }
+    
 
     public void reproductionSimulation() {
         ListIterator<UIObject> iterator = objectsList.listIterator();
@@ -147,7 +130,7 @@ public class MyEcosystemController {
             UIObject object = iterator.next();
             if (object.getPregnant()) {
                 for (int i = 0; i < object.randomNumberOfChildren(); i++) {
-                    iterator.add(object.copy());
+                    iterator.add(object.cloneObject());
                 }
                 object.setPregnant(false);
             }
@@ -155,7 +138,7 @@ public class MyEcosystemController {
     }
 
     private void redrawCanvas() {
-        if (backgroundImageLoaded == true) {
+        if (backgroundImageLoaded) {
             gc.clearRect(0, 0, CANVAS_WIDTH, Constants.CANVAS_HEIGHT);
             gc.drawImage(currentBackgroundImage, 0, 0, canvas.getWidth(), canvas.getHeight());
         } else {
@@ -224,7 +207,7 @@ public class MyEcosystemController {
         if (objectsList == null) {return;}
         for (UIObject object : objectsList) {
             object.printObject(gc, alpha);
-            Emotions.drawEmotion(gc, object);
+            EmojiLoader.drawEmotion(gc, object);
         }
     }
 
@@ -292,7 +275,7 @@ public class MyEcosystemController {
         double minPartnerDistance = BIG_RADIUS_VISION;
         for (UIObject other : objectsList) {
             if (other != thisObject && other.getObjectMode() != Dead && thisObject.isInRadius(other, thisObject.getBigRadiusVision())) {
-                double distance = Constants.calculateDistance(thisObject.getCenterX(), thisObject.getCenterY(), other.getCenterX(), other.getCenterY());
+                double distance = MathFunc.calculateDistance(thisObject.getCenterX(), thisObject.getCenterY(), other.getCenterX(), other.getCenterY());
 
                 if (thisObject.isTarget(other) && distance < minTargetDistance) {
                     minTargetDistance = distance;
@@ -338,7 +321,7 @@ public class MyEcosystemController {
     public static void shareFood(UIObject thisObject, int satiety) {
         int counter = 0;
         for (UIObject other : objectsList) {
-            if (counter == MAX_NUMBER_FOODSHARER) {break;}
+            if (counter == MAX_FOOD_SHARING_PARTNERS) {break;}
             if (other != thisObject &&  thisObject.getClass().equals(other.getClass()) && thisObject.isInRadius(other, SHARE_FOOD_DISTANCE)) {
                 if (counter == 0) {
                     other.addSatiety((int) (satiety * 0.5));

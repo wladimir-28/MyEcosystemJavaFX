@@ -3,24 +3,23 @@ package com.example.myecosystemjavafx.entities;
 import static com.example.myecosystemjavafx.Constants.ObjectMode.*;
 import static com.example.myecosystemjavafx.Constants.PLANT_REBIRTH_TIME;
 
-public class APlant extends UIObject {
+public abstract class APlant extends UIObject {
 
     protected int corpseTime = PLANT_REBIRTH_TIME;
 
     public APlant() {
         super();
     }
-
+    
+    @SuppressWarnings("CopyConstructorMissesField") // точная копия не требуется
     public APlant(APlant original) {
         super(original);
     }
 
-    @Override
-    public APlant copy() {
-        return new APlant(this);
-    }
+    public abstract APlant cloneObject();
 
-
+    public void getInfo() {}
+    
     @Override
     public void selectObjectMode() {
         if (objectMode != Dead) {objectMode = Rest;}
@@ -33,10 +32,10 @@ public class APlant extends UIObject {
                 restAction();
                 break;
             case Dead:
-                deadAction();;
+                deadAction();
                 break;
         }
-    };
+    }
 
     @Override
     public void restAction() { }

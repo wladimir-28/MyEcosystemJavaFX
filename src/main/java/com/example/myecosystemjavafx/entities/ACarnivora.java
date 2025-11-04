@@ -4,12 +4,12 @@ import com.example.myecosystemjavafx.MyEcosystemController;
 
 import static com.example.myecosystemjavafx.Constants.*;
 import static com.example.myecosystemjavafx.Constants.DangerState.*;
-import static com.example.myecosystemjavafx.Constants.EmotionsType.*;
+import static com.example.myecosystemjavafx.Constants.EmojiType.*;
 import static com.example.myecosystemjavafx.Constants.EnergyState.*;
 import static com.example.myecosystemjavafx.Constants.HungryState.*;
 import static com.example.myecosystemjavafx.Constants.ObjectMode.*;
 
-public class ACarnivora extends UIObject {
+public abstract class ACarnivora extends UIObject {
 
     protected double speedModBase = CARNIVORA_SPEED_MOD_BASE;
     protected double speedModFromState = 1;
@@ -20,41 +20,23 @@ public class ACarnivora extends UIObject {
     protected double smallRadiusVision = SMALL_RADIUS_VISION * smallRadiusModBase * smallRadiusModState;
 
     protected int corpseTime = CORPSE_TIME;
-    protected EmotionsType emotion = None;
+    protected EmojiType emotion = None;
 
     public ACarnivora() {
         super();
     }
+    
+    @SuppressWarnings("CopyConstructorMissesField") // точная копия не требуется
+    public ACarnivora(ACarnivora original) {super(original);}
 
-    public ACarnivora(ACarnivora original) {
-        super(original);
-    }
-
-    @Override
-    public ACarnivora copy() {
-        return new ACarnivora(this);
-    }
-
-    @Override
-    public double getBigRadiusVision() {
-        return bigRadiusVision;
-    }
-
+    public abstract ACarnivora cloneObject();
+    
     @Override
     public double getSmallRadiusVision() {
         return smallRadiusVision;
     }
 
-    @Override
-    public void getInfo() {
-        //System.out.println("ID: " + getId());
-        //System.out.println("speedModFromState: " + speedModFromState);
-        //System.out.println("Mode: " + objectMode);
-        //System.out.println("danger x y: " + "\t" + dangerX + "\t" + dangerY);
-        //System.out.println("Скорость: " + speed);
-        //System.out.println(getTargetX() + " " + getTargetY());
-
-    }
+    public void getInfo() {}
 
     @Override
     public void giveBuffDebuff() {
@@ -63,9 +45,7 @@ public class ACarnivora extends UIObject {
         double energyMod = 1;
         double seasonMod = 1;
 
-        if (MyEcosystemController.getSeasonOfYear() == SeasonsOfYear.Winter) {
-            seasonMod = 0.9;
-        } else {seasonMod = 1;}
+        if (MyEcosystemController.getSeasonOfYear() == SeasonsOfYear.Winter) {seasonMod = 0.9;}
         if (dangerState == Danger) {dangerMod = 1.4;}
         if (hungryState == VeryHungry) {hungryMod = 1.4;}
         else if (hungryState == Hungry) {hungryMod = 1.2;}
@@ -77,8 +57,6 @@ public class ACarnivora extends UIObject {
 
         smallRadiusModState = dangerMod * hungryMod * energyMod;
         smallRadiusVision = SMALL_RADIUS_VISION * smallRadiusModBase * smallRadiusModState;
-
-
     }
 
     @Override

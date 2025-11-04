@@ -33,11 +33,12 @@ public class CarnivoraWolf extends ACarnivora {
     protected int agilityScore = 20; //ловкость
 
     public CarnivoraWolf(){super();}
-
+    
+    @SuppressWarnings("CopyConstructorMissesField") // точная копия не требуется
     public CarnivoraWolf(CarnivoraWolf original) {super(original);}
 
     @Override
-    public CarnivoraWolf copy() {
+    public CarnivoraWolf cloneObject() {
         return new CarnivoraWolf(this);
     }
 
@@ -77,7 +78,7 @@ public class CarnivoraWolf extends ACarnivora {
     }
 
     // Постоянные цвета в полях класса
-    private final Color OBJECT_COLOR = Color.DIMGRAY;
+    protected final Color OBJECT_COLOR = Color.DIMGRAY;
 
 
     @Override
@@ -97,7 +98,7 @@ public class CarnivoraWolf extends ACarnivora {
         }
     }
 
-    private void drawDeadObject(GraphicsContext gc) {
+    protected void drawDeadObject(GraphicsContext gc) {
         boolean isBaby = getAge() < GROWING_UP_AGE;
 
         double currentWidth = isBaby ? babyWidth : width;
@@ -110,7 +111,7 @@ public class CarnivoraWolf extends ACarnivora {
         }
     }
 
-    private void drawBaby(GraphicsContext gc) {
+    protected void drawBaby(GraphicsContext gc) {
         if (imageLoaded) {
             drawImage(gc, femaleImage, babyWidth, babyHeight);
         } else {
@@ -118,7 +119,7 @@ public class CarnivoraWolf extends ACarnivora {
         }
     }
 
-    private void drawAdult(GraphicsContext gc) {
+    protected void drawAdult(GraphicsContext gc) {
         boolean isFemale = getGender() == Female;
 
         if (imageLoaded) {
@@ -128,7 +129,7 @@ public class CarnivoraWolf extends ACarnivora {
         }
     }
 
-    private void drawImage(GraphicsContext gc, Image image, double imgWidth, double imgHeight) {
+    protected void drawImage(GraphicsContext gc, Image image, double imgWidth, double imgHeight) {
         double centerX = getInterX() - imgWidth * HALF;
         double centerY = getInterY() - imgHeight * HALF;
         double scaledWidth = imageCorrection * imgWidth;
@@ -137,7 +138,7 @@ public class CarnivoraWolf extends ACarnivora {
         gc.drawImage(image, centerX, centerY, scaledWidth, scaledHeight);
     }
 
-    private void drawFallbackCircle(GraphicsContext gc, double circleWidth, double circleHeight, boolean isMale) {
+    protected void drawFallbackCircle(GraphicsContext gc, double circleWidth, double circleHeight, boolean isMale) {
         double centerX = getInterX();
         double centerY = getInterY();
         double radius = circleWidth * HALF; // Используем ширину как диаметр
@@ -159,7 +160,7 @@ public class CarnivoraWolf extends ACarnivora {
         }
     }
 
-    private void drawDeadCircle(GraphicsContext gc, double circleWidth, double circleHeight) {
+    protected void drawDeadCircle(GraphicsContext gc, double circleWidth, double circleHeight) {
         double centerX = getInterX();
         double centerY = getInterY();
         double radius = circleWidth * HALF;

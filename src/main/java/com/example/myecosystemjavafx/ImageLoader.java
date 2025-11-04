@@ -12,5 +12,4 @@ public class ImageLoader {
         PlantMediumShrub.loadImages("/mediumShrub_summer.png", "/mediumShrub_autumn.png","/mediumShrub_dead.png");
         PlantSmallShrub.loadImages("/smallShrub_summer.png", "/smallShrub_autumn.png","/smallShrub_dead.png");
     }
-
 }
