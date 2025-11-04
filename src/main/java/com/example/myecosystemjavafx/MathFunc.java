@@ -1,9 +1,18 @@
 package com.example.myecosystemjavafx;
 
+import com.example.myecosystemjavafx.entities.UIObject;
+
+import java.util.Random;
+
 import static java.lang.Math.sqrt;
 
 public class MathFunc {
-
+    
+    public static int randomNumberOfChildren(UIObject parent) {
+        Random random = new Random();
+        return random.nextInt(parent.getMaxNumberOfChildren() + 1); // от 1 до max включительно
+    }
+    
     public static double calculateDistance(double thisX, double thisY, double otherX, double otherY) {
         double dx = otherX - thisX;
         double dy = otherY - thisY;

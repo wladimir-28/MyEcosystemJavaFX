@@ -37,7 +37,6 @@ public abstract class AHerbivory extends UIObject {
 
     public void getInfo() {}
 
-    @Override
     public void giveBuffDebuff() {
         double dangerMod = 1;
         double hungryMod = 1;
@@ -58,7 +57,6 @@ public abstract class AHerbivory extends UIObject {
         smallRadiusVision = SMALL_RADIUS_VISION * smallRadiusModBase * smallRadiusModState;
     }
 
-    @Override
     public void selectObjectMode() {
         if (objectMode == Dead || satiety == 0)                             {objectMode = Dead;}
         else if (dangerState == Danger && hungryState != VeryHungry)        {objectMode = Fleeing;}

@@ -54,7 +54,7 @@ public class HerbivoryRabbit extends AHerbivory {
     public int getAgilityScore() {return agilityScore;}
 
     @Override
-    protected int getMaxNumberOfChildren() {return maxNumberOfChildren;}
+    public int getMaxNumberOfChildren() {return maxNumberOfChildren;}
 
     @Override
     public double getLongevity() {return longevity;}

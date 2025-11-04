@@ -19,7 +19,7 @@ public class MyEcosysLifeSim {
         while(iterator.hasNext()) {
             UIObject object = iterator.next();
             if (object.getPregnant()) {
-                for (int i = 0; i < object.randomNumberOfChildren(); i++) {
+                for (int i = 0; i < MathFunc.randomNumberOfChildren(object); i++) {
                     iterator.add(object.cloneObject());
                 }
                 object.setPregnant(false);
@@ -38,6 +38,22 @@ public class MyEcosysLifeSim {
             object.getInfo();
         }
         deleteCorpses();
+    }
+    
+    public void oldDeadSimulation(ArrayList<UIObject> objectsList) {
+        for (UIObject object : objectsList) {
+            if (object.getAge() < (int)(5 * object.getLongevity())) {
+                continue;
+            }
+            double random = Math.random();
+            double deathProbability = MathFunc.getDeathProbability(object.getAge(), object.getLongevity());
+            
+            if (random < deathProbability) {
+                //System.out.println("Умер от старости");
+                object.setObjectMode(Constants.ObjectMode.Dead);
+                object.setEmotion(Constants.EmojiType.OldDeadEmoji);
+            }
+        }
     }
     
     public void searchTargetDanger(UIObject thisObject, ArrayList<UIObject> objectsList) {

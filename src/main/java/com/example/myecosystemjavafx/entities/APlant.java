@@ -11,6 +11,7 @@ public abstract class APlant extends UIObject {
         super();
     }
     
+    
     @SuppressWarnings("CopyConstructorMissesField") // точная копия не требуется
     public APlant(APlant original) {
         super(original);
@@ -24,7 +25,9 @@ public abstract class APlant extends UIObject {
     public void selectObjectMode() {
         if (objectMode != Dead) {objectMode = Rest;}
     }
-
+    
+    public void giveBuffDebuff() {}
+    
     @Override
     public void actionObject() {
         switch (objectMode) {

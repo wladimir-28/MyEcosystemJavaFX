@@ -58,7 +58,7 @@ public class PlantSmallShrub extends APlant {
     public int getAgilityScore() {return agilityScore;}
 
     @Override
-    protected int getMaxNumberOfChildren() {return maxNumberOfChildren;}
+    public int getMaxNumberOfChildren() {return maxNumberOfChildren;}
 
     @Override
     public boolean getPregnant() {

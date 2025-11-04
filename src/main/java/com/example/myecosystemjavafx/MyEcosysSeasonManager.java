@@ -65,34 +65,11 @@ public class MyEcosysSeasonManager {
         }
     }
     
-    public void oldDeadSimulation(ArrayList<UIObject> objectsList) {
-        for (UIObject object : objectsList) {
-            if (object.getAge() < (int)(5 * object.getLongevity())) {
-                continue;
-            }
-            double random = Math.random();
-            double deathProbability = MathFunc.getDeathProbability(object.getAge(), object.getLongevity());
-            
-            if (random < deathProbability) {
-                object.setObjectMode(Constants.ObjectMode.Dead);
-                object.setEmotion(Constants.EmojiType.OldDeadEmoji);
-            }
-        }
-    }
+    public Image getCurrentBackgroundImage() {return currentBackgroundImage;}
     
-    public Image getCurrentBackgroundImage() {
-        return currentBackgroundImage;
-    }
+    public Color getCurrentReserveColor() {return currentReserveColor;}
     
-    public Color getCurrentReserveColor() {
-        return currentReserveColor;
-    }
+    public boolean isBackgroundImageLoaded() {return backgroundImageLoaded;}
     
-    public boolean isBackgroundImageLoaded() {
-        return backgroundImageLoaded;
-    }
-    
-    public static Constants.SeasonsOfYear getSeasonOfYear() {
-        return seasonOfYear;
-    }
+    public static Constants.SeasonsOfYear getSeasonOfYear() {return seasonOfYear;}
 }

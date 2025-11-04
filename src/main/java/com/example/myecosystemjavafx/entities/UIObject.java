@@ -147,7 +147,7 @@ public abstract class UIObject {
 
     public int getAge() {return age;}
 
-    protected int getMaxNumberOfChildren() {return maxNumberOfChildren;}
+    public int getMaxNumberOfChildren() {return maxNumberOfChildren;}
 
     public double getLongevity() {return longevity;}
 
@@ -206,11 +206,6 @@ public abstract class UIObject {
 
     /// ///////////////////////////////////////////
 
-    public int randomNumberOfChildren() {
-        Random random = new Random();
-        return random.nextInt(getMaxNumberOfChildren() + 1); // от 1 до max включительно
-    }
-
     public boolean isItPartner(UIObject other) {
         return this.getClass().equals(other.getClass()) && other.getAge() >= 1 && this.getGender() != other.getGender();
     }
@@ -235,9 +230,9 @@ public abstract class UIObject {
         //System.out.println(energyState);
     }
 
-    public void giveBuffDebuff() { } // у каждого дочернего своё
+    public abstract void giveBuffDebuff();
 
-    public void selectObjectMode() { } // у каждого дочернего своё
+    public abstract void selectObjectMode();
 
     public boolean isInRadius(UIObject other, double radius) {
         double dx = other.centerX - this.centerX;

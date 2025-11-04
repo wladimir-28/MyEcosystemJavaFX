@@ -24,10 +24,6 @@ public class MyEcosysTimeManager {
         lastRenderTime = now;
     }
     
-    public boolean shouldRender(long now) {
-        return now - lastRenderTime >= TARGET_FRAME_TIME;
-    }
-    
     public void updateTime(long now) {
         long deltaTime = now - lastFrameTime;
         accumulatedTime += deltaTime;
@@ -46,27 +42,17 @@ public class MyEcosysTimeManager {
         return false;
     }
     
-    public boolean shouldUpdateSeason(long now) {
-        return now - lastSeasonUpdate >= SEASON_INTERVAL;
-    }
+    public boolean shouldRender(long now) {return now - lastRenderTime >= TARGET_FRAME_TIME;}
     
-    public void updateSeasonTime(long now) {
-        lastSeasonUpdate = now;
-    }
+    public boolean shouldUpdateSeason(long now) {return now - lastSeasonUpdate >= SEASON_INTERVAL;}
     
-    public boolean shouldUpdateYear(long now) {
-        return now - lastYearsUpdate >= YEAR_INTERVAL;
-    }
+    public void updateSeasonTime(long now) {lastSeasonUpdate = now;}
     
-    public void updateYearTime(long now) {
-        lastYearsUpdate = now;
-    }
+    public boolean shouldUpdateYear(long now) {return now - lastYearsUpdate >= YEAR_INTERVAL;}
     
-    public double getAlpha() {
-        return alpha;
-    }
+    public void updateYearTime(long now) {lastYearsUpdate = now;}
     
-    public long getLastFrameTime() {
-        return lastFrameTime;
-    }
+    public double getAlpha() {return alpha;}
+    
+    public long getLastFrameTime() {return lastFrameTime;}
 }

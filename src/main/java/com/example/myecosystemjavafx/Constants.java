@@ -9,7 +9,7 @@ public class Constants {
     public static final double  EDGE_AVOIDANCE_PERCENT_X = 2.5; // защитная зона по краям поля по X
     public static final double  EDGE_AVOIDANCE_PERCENT_Y = 5.0; //  защитная зона по краям поля по Y
     public static final double  HALF = 0.5;
-    public static final double  TEMP_K = 1.3; // для тестового масштабирования изображений
+    public static final double  TEMP_K = 1.6; // для масштабирования изображений
 
     public static final double  BASE_SIZE = 10; // базовый размер объекта
     public static final double  BIG_RADIUS_VISION = BASE_SIZE * 65;

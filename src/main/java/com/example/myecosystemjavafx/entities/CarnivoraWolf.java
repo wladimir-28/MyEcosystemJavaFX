@@ -55,7 +55,7 @@ public class CarnivoraWolf extends ACarnivora {
     public int getAgilityScore() {return agilityScore;}
 
     @Override
-    protected int getMaxNumberOfChildren() {return maxNumberOfChildren;}
+    public int getMaxNumberOfChildren() {return maxNumberOfChildren;}
 
     @Override
     public int getMaxSatiety() {return maxSatiety;}
