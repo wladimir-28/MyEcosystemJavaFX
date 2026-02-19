@@ -1,6 +1,6 @@
 package com.example.myecosystemjavafx;
 
-import com.example.myecosystemjavafx.entities.UIObject;
+import com.example.myecosystemjavafx.entities.AAEntity;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
@@ -59,8 +59,8 @@ public class MyEcosysSeasonManager {
         }
     }
     
-    public void nextYear(ArrayList<UIObject> objectsList) {
-        for (UIObject object : objectsList) {
+    public void nextYear(ArrayList<AAEntity> objectsList) {
+        for (AAEntity object : objectsList) {
             object.addAge(1);
         }
     }

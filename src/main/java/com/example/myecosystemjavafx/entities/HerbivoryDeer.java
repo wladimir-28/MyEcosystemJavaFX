@@ -22,7 +22,8 @@ public class HerbivoryDeer extends AHerbivory {
     protected final double height = BASE_SIZE * 1.1;
     protected final double babyWidth = 0.8 * width;
     protected final double babyHeight = 0.8 * height;
-    protected final double imageCorrection = 1.9 * TEMP_K;
+    protected double imagePersKoef = 1.9;
+    protected double imageCorrection;
 
     protected int maxNumberOfChildren = 2;
 
@@ -79,10 +80,13 @@ public class HerbivoryDeer extends AHerbivory {
 
     // Постоянные цвета в полях класса
     protected final Color OBJECT_COLOR = Color.SANDYBROWN;
-
-
+    
+    @Override
+    protected void refreshImageCorrection() {imageCorrection = imagePersKoef * temp_k;}
+    
     @Override
     public void printObject(GraphicsContext gc, double alpha) {
+        refreshImageCorrection();
         interpolatedX(alpha);
         interpolatedY(alpha);
 

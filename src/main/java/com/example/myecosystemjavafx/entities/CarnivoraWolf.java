@@ -23,8 +23,9 @@ public class CarnivoraWolf extends ACarnivora {
     protected final double height = BASE_SIZE;
     protected final double babyWidth = 0.8 * width;
     protected final double babyHeight = 0.8 * height;
-    protected final double imageCorrection = 1.9 * TEMP_K;
-
+    protected double imagePersKoef = 1.9;
+    protected double imageCorrection;
+    
     protected int maxNumberOfChildren = 2;
 
     protected double satietyModifier = 1; //модификатор насыщения (для крупных животных - штраф)
@@ -53,7 +54,9 @@ public class CarnivoraWolf extends ACarnivora {
 
     @Override
     public int getAgilityScore() {return agilityScore;}
-
+    
+    
+    
     @Override
     public int getMaxNumberOfChildren() {return maxNumberOfChildren;}
 
@@ -62,8 +65,7 @@ public class CarnivoraWolf extends ACarnivora {
 
     @Override
     public double getLongevity() {return longevity;}
-
-
+    
     public static void loadImages(String maleImagePath, String femaleImagePath, String deadImagePath) {
         try {
             maleImage = new Image(CarnivoraWolf.class.getResourceAsStream(maleImagePath));
@@ -79,10 +81,13 @@ public class CarnivoraWolf extends ACarnivora {
 
     // Постоянные цвета в полях класса
     protected final Color OBJECT_COLOR = Color.DIMGRAY;
-
+    
+    @Override
+    protected void refreshImageCorrection() {imageCorrection = imagePersKoef * temp_k;}
 
     @Override
     public void printObject(GraphicsContext gc, double alpha) {
+        refreshImageCorrection();
         interpolatedX(alpha);
         interpolatedY(alpha);
 

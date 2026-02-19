@@ -11,7 +11,7 @@ import static com.example.myecosystemjavafx.EmojiLoader.loadEmotionImages;
 public class MyEcosysController {
     
     private MyEcosysUIManager uiManager;
-    private MyEcosysObjectManager objectManager;
+    private MyEcosysEntityManager objectManager;
     private MyEcosysTimeManager timeManager;
     private MyEcosysSeasonManager seasonManager;
     private MyEcosysLifeSim lifeSim;
@@ -60,16 +60,20 @@ public class MyEcosysController {
     @FXML private Button AddWolfButtonX5;
     @FXML private Button DeleteLastObjectButton;
     @FXML private Button PauseButton;
+    @FXML private Button imageScaleDefaultButton;
+    @FXML private Button imageScaleMinusButton;
+    @FXML private Button imageScalePlusButton;
+    
     
     @FXML
     private void initialize() {
         gc = canvas.getGraphicsContext2D();
         gc.setImageSmoothing(true);
         
-        objectManager = new MyEcosysObjectManager();
+        objectManager = new MyEcosysEntityManager();
         timeManager = new MyEcosysTimeManager();
         seasonManager = new MyEcosysSeasonManager();
-        lifeSim = new MyEcosysLifeSim(objectManager.getObjectsList());
+        lifeSim = new MyEcosysLifeSim(objectManager.getEntitiesList());
         uiManager = new MyEcosysUIManager(gc, canvas, seasonManager);
         
         seasonManager.loadBackgroundImages();
@@ -93,7 +97,7 @@ public class MyEcosysController {
                 
                 timeManager.updateTime(now);
                 uiManager.redrawCanvas();
-                uiManager.drawObjects(objectManager.getObjectsList(), timeManager.getAlpha());
+                uiManager.drawObjects(objectManager.getYSortEntitiesList(), timeManager.getAlpha());
                 
                 if (timeManager.shouldUpdateLife(now)) {
                     lifeSim.lifeSimulation();
@@ -101,12 +105,12 @@ public class MyEcosysController {
                 
                 if (timeManager.shouldUpdateSeason(now)) {
                     seasonManager.nextSeason();
-                    lifeSim.oldDeadSimulation(objectManager.getObjectsList());
+                    lifeSim.oldDeadSimulation(objectManager.getEntitiesList());
                     timeManager.updateSeasonTime(now);
                 }
                 
                 if (timeManager.shouldUpdateYear(now)) {
-                    seasonManager.nextYear(objectManager.getObjectsList());
+                    seasonManager.nextYear(objectManager.getEntitiesList());
                     lifeSim.reproductionSimulation();
                     timeManager.updateYearTime(now);
                 }
@@ -176,4 +180,9 @@ public class MyEcosysController {
     @FXML void addSmallShrubX25(ActionEvent event) { objectManager.addSmallShrubs(25); }
     
     @FXML void deleteLastObject(ActionEvent event) { objectManager.deleteLastObject(); }
+    
+    @FXML void imageScaleDefault(ActionEvent event) {Constants.temp_k = 1.6;}
+    @FXML void imageScalePlus(ActionEvent event) {Constants.temp_k *= 1.05;}
+    @FXML void imageScaleMinus(ActionEvent event) {Constants.temp_k *= 0.95;}
+    
 }

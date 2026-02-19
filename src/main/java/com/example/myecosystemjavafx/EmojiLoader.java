@@ -1,7 +1,7 @@
 package com.example.myecosystemjavafx;
 
 import javafx.scene.canvas.GraphicsContext;
-import com.example.myecosystemjavafx.entities.UIObject;
+import com.example.myecosystemjavafx.entities.AAEntity;
 import javafx.scene.image.Image;
 import static com.example.myecosystemjavafx.Constants.*;
 
@@ -30,7 +30,7 @@ public class EmojiLoader {
         }
     }
 
-    public static void playEmotion(GraphicsContext gc, UIObject object, Image emotionImage) {
+    public static void playEmotion(GraphicsContext gc, AAEntity object, Image emotionImage) {
         long time = System.currentTimeMillis();
         double shakeX = Math.sin(time * 0.01) * 1.5;
         double shakeY = Math.cos(time * 0.008) * 1.5;
@@ -44,7 +44,7 @@ public class EmojiLoader {
         );
     }
 
-    public static void drawEmotion(GraphicsContext gc, UIObject object) {
+    public static void drawEmotion(GraphicsContext gc, AAEntity object) {
         if(!emotionsImageLoaded) {return;}
         switch (object.getEmotion()) {
             case SleepEmoji:

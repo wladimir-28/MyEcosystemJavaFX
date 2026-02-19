@@ -27,7 +27,8 @@ public class PlantSmallShrub extends APlant {
     protected final double babyWidth = 0.8 * width;
     protected final double babyHeight = 0.8 * height;
     protected final double babyLength = 0.8 * length;
-    protected final double imageCorrection = 5 * TEMP_K;
+    protected double imagePersKoef = 5;
+    protected double imageCorrection;
 
     protected double satietyModifier = 0; //модификатор насыщения (для крупных животных - штраф)
     protected int nutritionValue = 25; //сытность, хар-т питательность как жертвы
@@ -80,9 +81,13 @@ public class PlantSmallShrub extends APlant {
             imageLoaded = false;
         }
     }
-
+    
+    @Override
+    protected void refreshImageCorrection() {imageCorrection = imagePersKoef * temp_k;}
+    
     @Override
     public void printObject(GraphicsContext gc, double alpha) {
+        refreshImageCorrection();
         if (objectMode == Dead || MyEcosysSeasonManager.getSeasonOfYear() == Winter) {
             drawDeadObject(gc);
             return;

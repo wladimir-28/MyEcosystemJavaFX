@@ -14,7 +14,7 @@ import static com.example.myecosystemjavafx.Constants.ObjectGender.*;
 import static com.example.myecosystemjavafx.Constants.ObjectMode.*;
 import static java.lang.Math.sqrt;
 
-public abstract class Entity {
+public abstract class AAEntity {
     private static int counterId = 1;
     protected static int counterObjects = 0;
     protected int id;
@@ -76,7 +76,7 @@ public abstract class Entity {
     protected EmojiType emotion = None;
 
 
-    public Entity() {
+    public AAEntity() {
         id = counterId++;
         counterObjects++;
         objectGender = MathFunc.getRandomGender();
@@ -92,7 +92,7 @@ public abstract class Entity {
     }
     
     @SuppressWarnings("CopyConstructorMissesField") // точная копия не требуется
-    public Entity(Entity original) {
+    public AAEntity(AAEntity original) {
         id = counterId++;
         counterObjects++;
         objectGender = MathFunc.getRandomGender();
@@ -103,7 +103,7 @@ public abstract class Entity {
         previousY = centerY;
     }
 
-    public abstract Entity cloneObject();
+    public abstract AAEntity cloneObject();
 
     public static int getCounterObjects() {
         return counterObjects;
@@ -203,7 +203,7 @@ public abstract class Entity {
 
     /// ///////////////////////////////////////////
 
-    public boolean isItPartner(Entity other) {
+    public boolean isItPartner(AAEntity other) {
         return this.getClass().equals(other.getClass()) && other.getAge() >= 1 && this.getGender() != other.getGender();
     }
 
@@ -231,7 +231,7 @@ public abstract class Entity {
 
     public abstract void selectObjectMode();
 
-    public boolean isInRadius(Entity other, double radius) {
+    public boolean isInRadius(AAEntity other, double radius) {
         double dx = other.centerX - this.centerX;
         double dy = other.centerY - this.centerY;
         double distanceSquared = dx * dx + dy * dy;
@@ -292,6 +292,8 @@ public abstract class Entity {
     public void interpolatedY(double alpha) {
         interY = previousY + ((centerY - previousY) * alpha);
     }
+    
+    protected abstract void refreshImageCorrection();
 
     public void walkAction() {
         addEnergy(ENERGY_FOR_WALKING);
@@ -411,7 +413,7 @@ public abstract class Entity {
         }
     }
 
-    public void lovePartner(Entity other) {
+    public void lovePartner(AAEntity other) {
         if (getGender() == Female) {
             setPregnant(true);
             //System.out.println("Беременна");
@@ -419,7 +421,7 @@ public abstract class Entity {
         setEmotion(LoveEmoji);
     }
 
-    public void catchTarget(Entity other) {
+    public void catchTarget(AAEntity other) {
         double DefMod = calcDefenseModifier(this.getStrongScore(), other.getStrongScore());
         double EscMod = calcEscapeModifier(this.getAgilityScore(), other.getAgilityScore());
 
@@ -454,9 +456,9 @@ public abstract class Entity {
 
     public void moveObject(double dirX, double dirY) { }
 
-    public boolean isTarget(Entity other) { return false;}
+    public boolean isTarget(AAEntity other) { return false;}
 
-    public boolean isDanger(Entity other) { return false;}
+    public boolean isDanger(AAEntity other) { return false;}
 
     public boolean isSenseDanger() {
         if (CHANCE_OF_SENSING_DANGER  <= 0) {return false;}

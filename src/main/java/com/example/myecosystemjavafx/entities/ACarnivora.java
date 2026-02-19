@@ -9,7 +9,7 @@ import static com.example.myecosystemjavafx.Constants.EnergyState.*;
 import static com.example.myecosystemjavafx.Constants.HungryState.*;
 import static com.example.myecosystemjavafx.Constants.ObjectMode.*;
 
-public abstract class ACarnivora extends UIObject {
+public abstract class ACarnivora extends AAEntity {
 
     protected double speedModBase = CARNIVORA_SPEED_MOD_BASE;
     protected double speedModFromState = 1;
@@ -82,7 +82,7 @@ public abstract class ACarnivora extends UIObject {
     }
 
     @Override
-    public boolean isTarget(UIObject other) {return other instanceof AHerbivory;}
+    public boolean isTarget(AAEntity other) {return other instanceof AHerbivory;}
 
     @Override
     public boolean isCorpseDelete() {

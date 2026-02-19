@@ -1,6 +1,6 @@
 package com.example.myecosystemjavafx;
 
-import com.example.myecosystemjavafx.entities.UIObject;
+import com.example.myecosystemjavafx.entities.AAEntity;
 
 import java.util.Random;
 
@@ -8,7 +8,7 @@ import static java.lang.Math.sqrt;
 
 public class MathFunc {
     
-    public static int randomNumberOfChildren(UIObject parent) {
+    public static int randomNumberOfChildren(AAEntity parent) {
         Random random = new Random();
         return random.nextInt(parent.getMaxNumberOfChildren() + 1); // от 1 до max включительно
     }

@@ -1,6 +1,6 @@
 package com.example.myecosystemjavafx;
 
-import com.example.myecosystemjavafx.entities.UIObject;
+import com.example.myecosystemjavafx.entities.AAEntity;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -28,10 +28,10 @@ public class MyEcosysUIManager {
         }
     }
     
-    public void drawObjects(ArrayList<UIObject> objectsList, double alpha) {
+    public void drawObjects(ArrayList<AAEntity> objectsList, double alpha) {
         if (objectsList == null) return;
         
-        for (UIObject object : objectsList) {
+        for (AAEntity object : objectsList) {
             object.printObject(gc, alpha);
             EmojiLoader.drawEmotion(gc, object);
         }

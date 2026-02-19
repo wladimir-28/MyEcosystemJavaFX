@@ -3,13 +3,13 @@ package com.example.myecosystemjavafx;
 public class Constants {
     public static final int     CANVAS_WIDTH = 1520; // ширина поля
     public static final int     CANVAS_HEIGHT = 800; // высота поля
-    public static final int     WINDOW_WIDTH = 1600; // ширина поля
-    public static final int     WINDOW_HEIGHT = 950;
+    public static final int     WINDOW_WIDTH = 1600; // ширина окна
+    public static final int     WINDOW_HEIGHT = 950; // высота окна
     public static final int     SECOND_IN_SEASON = 10;
     public static final double  EDGE_AVOIDANCE_PERCENT_X = 2.5; // защитная зона по краям поля по X
     public static final double  EDGE_AVOIDANCE_PERCENT_Y = 5.0; //  защитная зона по краям поля по Y
     public static final double  HALF = 0.5;
-    public static final double  TEMP_K = 1.6; // для масштабирования изображений
+    public static double        temp_k = 1.5; // для масштабирования изображений
 
     public static final double  BASE_SIZE = 10; // базовый размер объекта
     public static final double  BIG_RADIUS_VISION = BASE_SIZE * 65;

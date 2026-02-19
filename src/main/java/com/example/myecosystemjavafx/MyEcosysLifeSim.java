@@ -1,23 +1,23 @@
 package com.example.myecosystemjavafx;
 
 import com.example.myecosystemjavafx.entities.APlant;
-import com.example.myecosystemjavafx.entities.UIObject;
+import com.example.myecosystemjavafx.entities.AAEntity;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ListIterator;
 import static com.example.myecosystemjavafx.Constants.*;
 
 public class MyEcosysLifeSim {
-    private static ArrayList<UIObject> objectsList;
+    private static ArrayList<AAEntity> objectsList;
     
-    public MyEcosysLifeSim(ArrayList<UIObject> objectsList) {
+    public MyEcosysLifeSim(ArrayList<AAEntity> objectsList) {
         this.objectsList = objectsList;
     }
     
     public void reproductionSimulation() {
-        ListIterator<UIObject> iterator = objectsList.listIterator();
+        ListIterator<AAEntity> iterator = objectsList.listIterator();
         while(iterator.hasNext()) {
-            UIObject object = iterator.next();
+            AAEntity object = iterator.next();
             if (object.getPregnant()) {
                 for (int i = 0; i < MathFunc.randomNumberOfChildren(object); i++) {
                     iterator.add(object.cloneObject());
@@ -28,7 +28,7 @@ public class MyEcosysLifeSim {
     }
     
     public void lifeSimulation() {
-        for (UIObject object : objectsList) {
+        for (AAEntity object : objectsList) {
             object.checkState();
             searchTargetDanger(object, objectsList);
             object.selectObjectMode();
@@ -40,8 +40,8 @@ public class MyEcosysLifeSim {
         deleteCorpses();
     }
     
-    public void oldDeadSimulation(ArrayList<UIObject> objectsList) {
-        for (UIObject object : objectsList) {
+    public void oldDeadSimulation(ArrayList<AAEntity> objectsList) {
+        for (AAEntity object : objectsList) {
             if (object.getAge() < (int)(5 * object.getLongevity())) {
                 continue;
             }
@@ -56,7 +56,7 @@ public class MyEcosysLifeSim {
         }
     }
     
-    public void searchTargetDanger(UIObject thisObject, ArrayList<UIObject> objectsList) {
+    public void searchTargetDanger(AAEntity thisObject, ArrayList<AAEntity> objectsList) {
         if (thisObject instanceof APlant || thisObject.getObjectMode() == Constants.ObjectMode.Dead) {
             return;
         }
@@ -64,7 +64,7 @@ public class MyEcosysLifeSim {
         
         double minTargetDistance = BIG_RADIUS_VISION;
         double minPartnerDistance = BIG_RADIUS_VISION;
-        for (UIObject other : objectsList) {
+        for (AAEntity other : objectsList) {
             if (other != thisObject && other.getObjectMode() != Constants.ObjectMode.Dead &&
                     thisObject.isInRadius(other, thisObject.getBigRadiusVision())) {
                 double distance = MathFunc.calculateDistance(thisObject.getCenterX(), thisObject.getCenterY(),
@@ -95,12 +95,12 @@ public class MyEcosysLifeSim {
         }
     }
     
-    public void interact(UIObject thisObject, ArrayList<UIObject> objectsList, double radius) {
+    public void interact(AAEntity thisObject, ArrayList<AAEntity> objectsList, double radius) {
         if (thisObject instanceof APlant || thisObject.getObjectMode() == Constants.ObjectMode.Dead) {
             return;
         }
         
-        for (UIObject other : objectsList) {
+        for (AAEntity other : objectsList) {
             if (other != thisObject && other.getObjectMode() != Constants.ObjectMode.Dead &&
                     thisObject.isInRadius(other, radius)) {
                 if (thisObject.getObjectMode() == Constants.ObjectMode.Hunting && thisObject.isTarget(other)) {
@@ -115,9 +115,9 @@ public class MyEcosysLifeSim {
         }
     }
     
-    public static void shareFood(UIObject thisObject, int satiety) {
+    public static void shareFood(AAEntity thisObject, int satiety) {
         int counter = 0;
-        for (UIObject other : objectsList) {
+        for (AAEntity other : objectsList) {
             if (counter == MAX_FOOD_SHARING_PARTNERS) {
                 break;
             }
@@ -136,13 +136,13 @@ public class MyEcosysLifeSim {
     }
     
     public void deleteCorpses() {
-        Iterator<UIObject> iterator = objectsList.iterator();
+        Iterator<AAEntity> iterator = objectsList.iterator();
         while (iterator.hasNext()) {
-            UIObject object = iterator.next();
+            AAEntity object = iterator.next();
             
             if (object != null && object.isCorpseDelete()) {
                 iterator.remove();
-                UIObject.decrementCounterObject();
+                AAEntity.decrementCounterObject();
             }
         }
     }

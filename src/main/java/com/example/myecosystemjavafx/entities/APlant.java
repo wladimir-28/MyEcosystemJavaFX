@@ -3,7 +3,7 @@ package com.example.myecosystemjavafx.entities;
 import static com.example.myecosystemjavafx.Constants.ObjectMode.*;
 import static com.example.myecosystemjavafx.Constants.PLANT_REBIRTH_TIME;
 
-public abstract class APlant extends UIObject {
+public abstract class APlant extends AAEntity {
 
     protected int corpseTime = PLANT_REBIRTH_TIME;
 
