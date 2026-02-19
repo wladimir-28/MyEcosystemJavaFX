@@ -2,12 +2,9 @@ package com.example.myecosystemjavafx.entities;
 
 import com.example.myecosystemjavafx.Constants;
 import com.example.myecosystemjavafx.MyEcosysLifeSim;
-import com.example.myecosystemjavafx.EmojiLoader;
 import com.example.myecosystemjavafx.MathFunc;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-
-import java.util.Random;
 
 import static com.example.myecosystemjavafx.Constants.EmojiType.*;
 import static com.example.myecosystemjavafx.Constants.*;
@@ -17,7 +14,7 @@ import static com.example.myecosystemjavafx.Constants.ObjectGender.*;
 import static com.example.myecosystemjavafx.Constants.ObjectMode.*;
 import static java.lang.Math.sqrt;
 
-public abstract class UIObject {
+public abstract class Entity {
     private static int counterId = 1;
     protected static int counterObjects = 0;
     protected int id;
@@ -79,7 +76,7 @@ public abstract class UIObject {
     protected EmojiType emotion = None;
 
 
-    public UIObject() {
+    public Entity() {
         id = counterId++;
         counterObjects++;
         objectGender = MathFunc.getRandomGender();
@@ -95,7 +92,7 @@ public abstract class UIObject {
     }
     
     @SuppressWarnings("CopyConstructorMissesField") // точная копия не требуется
-    public UIObject(UIObject original) {
+    public Entity(Entity original) {
         id = counterId++;
         counterObjects++;
         objectGender = MathFunc.getRandomGender();
@@ -106,7 +103,7 @@ public abstract class UIObject {
         previousY = centerY;
     }
 
-    public abstract  UIObject cloneObject();
+    public abstract Entity cloneObject();
 
     public static int getCounterObjects() {
         return counterObjects;
@@ -206,7 +203,7 @@ public abstract class UIObject {
 
     /// ///////////////////////////////////////////
 
-    public boolean isItPartner(UIObject other) {
+    public boolean isItPartner(Entity other) {
         return this.getClass().equals(other.getClass()) && other.getAge() >= 1 && this.getGender() != other.getGender();
     }
 
@@ -234,7 +231,7 @@ public abstract class UIObject {
 
     public abstract void selectObjectMode();
 
-    public boolean isInRadius(UIObject other, double radius) {
+    public boolean isInRadius(Entity other, double radius) {
         double dx = other.centerX - this.centerX;
         double dy = other.centerY - this.centerY;
         double distanceSquared = dx * dx + dy * dy;
@@ -414,7 +411,7 @@ public abstract class UIObject {
         }
     }
 
-    public void lovePartner(UIObject other) {
+    public void lovePartner(Entity other) {
         if (getGender() == Female) {
             setPregnant(true);
             //System.out.println("Беременна");
@@ -422,7 +419,7 @@ public abstract class UIObject {
         setEmotion(LoveEmoji);
     }
 
-    public void catchTarget(UIObject other) {
+    public void catchTarget(Entity other) {
         double DefMod = calcDefenseModifier(this.getStrongScore(), other.getStrongScore());
         double EscMod = calcEscapeModifier(this.getAgilityScore(), other.getAgilityScore());
 
@@ -457,9 +454,9 @@ public abstract class UIObject {
 
     public void moveObject(double dirX, double dirY) { }
 
-    public boolean isTarget(UIObject other) { return false;}
+    public boolean isTarget(Entity other) { return false;}
 
-    public boolean isDanger(UIObject other) { return false;}
+    public boolean isDanger(Entity other) { return false;}
 
     public boolean isSenseDanger() {
         if (CHANCE_OF_SENSING_DANGER  <= 0) {return false;}
